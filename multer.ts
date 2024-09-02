@@ -16,4 +16,4 @@ const imageStorage = multer.diskStorage({
     callback(null, 'images/' + newFilename);
   },
 });
-export const imageUpload = multer({storage: imageStorage});
+export const imagesUpload = multer({storage: imageStorage});
