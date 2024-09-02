@@ -3,3 +3,9 @@ export interface ArtistMutation {
   information: string;
   photo: string | null;
 }
+export interface AlbumMutation {
+  title: string;
+  artist: string;
+  date: string;
+  image: string | null;
+}
