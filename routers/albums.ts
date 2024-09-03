@@ -34,7 +34,7 @@ albumsRouter.post('/', imagesUpload.single('image'), async (req, res, next) => {
     const albumMutation: AlbumMutation = {
       title: req.body.title,
       artist: req.body.artist,
-      date: req.body.date,
+      date: !isNaN(Date.parse(req.body.date)) ? new Date(req.body.date).toISOString() : req.body.date,
       image: req.file ? req.file.filename : null,
     };
     const album = new Album(albumMutation);

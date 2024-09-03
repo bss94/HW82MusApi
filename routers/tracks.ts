@@ -5,7 +5,6 @@ import {TrackMutation} from '../types';
 const tracksRouter = express.Router();
 
 tracksRouter.get('/', async (req, res, next) => {
-
   try {
     const albumId = req.query.album;
     const tracks = await Track.find(albumId ? {album: albumId} : {});

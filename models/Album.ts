@@ -23,6 +23,12 @@ const AlbumSchema = new Schema({
   date: {
     type: String,
     required: true,
+    validate: {
+      validator: async (value: string) => {
+        return !isNaN(Date.parse(value));
+      },
+      message: 'Date is invalid! enter on YYYY-MM-DD format',
+    },
   },
   image: String,
 });
