@@ -20,7 +20,26 @@ const TrackSchema = new Schema({
       message: 'Album does not exist',
     },
   },
-  time: String,
+  time: {
+    type: String,
+    validate: {
+      validator: async (value: string) => {
+        if (value.includes(':')) {
+          const strArr = value.split(':');
+          return (
+            strArr.length === 2
+            && strArr[1].length === 2
+            && !isNaN(Number(strArr[0]))
+            && !isNaN(Number(strArr[1]))
+            && parseInt(strArr[0]) >= 0
+            && parseInt(strArr[1]) >= 0
+            && parseInt(strArr[1]) < 60
+          );
+        } else return false;
+      },
+      message: 'Time must be on mm:ss format',
+    },
+  },
 });
 
 const Track = mongoose.model('Track', TrackSchema);
