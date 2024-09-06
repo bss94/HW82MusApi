@@ -11,11 +11,7 @@ trackHistoryRouter.post('/', async (req, res, next) => {
     if (!headerValue) {
       return res.status(401).send({error: 'Header "Authorization" not found'});
     }
-    const [_bearer, token] = headerValue.split(' ');
-    if (!token) {
-      return res.status(401).send({error: 'Token not found'});
-    }
-    const user = await User.findOne({token});
+    const user = await User.findOne({token: headerValue});
     if (!user) {
       return res.status(401).send({error: 'Unauthorized! Wrong Token!'});
     }

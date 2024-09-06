@@ -1,4 +1,4 @@
-import mongoose, { Model } from 'mongoose';
+import mongoose, {Model} from 'mongoose';
 
 export interface ArtistMutation {
   name: string;
@@ -18,6 +18,7 @@ export interface TrackMutation {
   album: string;
   time: string;
 }
+
 export interface TrackHistoryMutation {
   user: mongoose.Types.ObjectId;
   track: string;
@@ -32,6 +33,7 @@ export interface UserFields {
 
 export interface UserMethods {
   checkPassword(password: string): Promise<boolean>;
+
   generateToken(): void;
 }
 

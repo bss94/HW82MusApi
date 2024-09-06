@@ -1,7 +1,7 @@
 import mongoose from 'mongoose';
 import bcrypt from 'bcrypt';
-import { UserFields, UserMethods, UserModel } from '../types';
-import { randomUUID } from 'node:crypto';
+import {UserFields, UserMethods, UserModel} from '../types';
+import {randomUUID} from 'node:crypto';
 
 const SALT_WORK_FACTOR = 10;
 
@@ -23,15 +23,15 @@ const UserSchema = new Schema<UserFields, UserModel, UserMethods>({
   }
 });
 
-UserSchema.methods.checkPassword = function(password) {
+UserSchema.methods.checkPassword = function (password) {
   return bcrypt.compare(password, this.password);
 };
 
-UserSchema.methods.generateToken = function() {
+UserSchema.methods.generateToken = function () {
   this.token = randomUUID();
 };
 
-UserSchema.pre('save', async function(next) {
+UserSchema.pre('save', async function (next) {
   if (!this.isModified('password')) {
     return next();
   }
