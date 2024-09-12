@@ -40,6 +40,10 @@ const TrackSchema = new Schema({
       message: 'Time must be on mm:ss format',
     },
   },
+  trackNumber:{
+    type: Number,
+    required: true,
+  }
 });
 
 const Track = mongoose.model('Track', TrackSchema);

@@ -20,6 +20,7 @@ tracksRouter.post('/', async (req, res, next) => {
       title: req.body.title,
       album: req.body.album,
       time: req.body.time,
+      trackNumber:req.body.trackNumber
     };
     const track = new Track(trackMutation);
     await track.save();

@@ -37,18 +37,18 @@ const run = async () => {
   const [firstAlbum, secondAlbum, thirdAlbum] = await Album.create({
       title: 'Still',
       artist: dreArtist,
-      date: '1999-10-10',
+      date: 1999,
       image: null
     }, {
       title: 'Snoop Lion',
       artist: snoopArtist,
-      date: '2017-10-09',
+      date: 2017,
       image: null
     },
     {
       title: '9 mile',
       artist: eminemArtist,
-      date: '2002-02-10',
+      date: 2020,
       image: null
     }
   );

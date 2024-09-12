@@ -9,7 +9,7 @@ const albumsRouter = express.Router();
 albumsRouter.get('/', async (req, res, next) => {
   try {
     const artistId = req.query.artist;
-    const albums = await Album.find(artistId ? {artist: artistId} : {});
+    const albums = await Album.find(artistId ? {artist: artistId} : {}).sort({ date: -1 });
     return res.send(albums);
 
   } catch (error) {
@@ -34,7 +34,7 @@ albumsRouter.post('/', imagesUpload.single('image'), async (req, res, next) => {
     const albumMutation: AlbumMutation = {
       title: req.body.title,
       artist: req.body.artist,
-      date: !isNaN(Date.parse(req.body.date)) ? new Date(req.body.date).toISOString() : req.body.date,
+      date:  parseFloat(req.body.date),
       image: req.file ? req.file.filename : null,
     };
     const album = new Album(albumMutation);

@@ -21,13 +21,13 @@ const AlbumSchema = new Schema({
     },
   },
   date: {
-    type: String,
+    type: Number,
     required: true,
     validate: {
-      validator: async (value: string) => {
-        return !isNaN(Date.parse(value));
+      validator: async (value: number) => {
+        return value>1900;
       },
-      message: 'Date is invalid! enter on YYYY-MM-DD format',
+      message: 'Date is invalid! entered value must be bigger than 1900',
     },
   },
   image: String,
