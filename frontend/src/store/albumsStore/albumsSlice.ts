@@ -1,9 +1,10 @@
 import {createSlice} from '@reduxjs/toolkit';
 import {fetchAlbums} from './albumsThunks.ts';
+import {Album} from '../../types.ts';
 
 
 export interface AlbumsState {
-  albums: [];
+  albums: Album[];
   albumsFetching: boolean;
 }
 
@@ -15,7 +16,11 @@ const initialState: AlbumsState = {
 export const albumsSlice = createSlice({
   name: 'albums',
   initialState,
-  reducers: {},
+  reducers: {
+    resetAlbums:(state)=>{
+      state.albums = []
+    }
+  },
   extraReducers: (builder) => {
     builder.addCase(fetchAlbums.pending, (state) => {
       state.albumsFetching = true;
@@ -39,3 +44,4 @@ export const {
   selectAlbums,
   selectAlbumsFetching
 } = albumsSlice.selectors;
+export const {resetAlbums} = albumsSlice.actions
