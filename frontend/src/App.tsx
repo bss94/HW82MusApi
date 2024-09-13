@@ -12,8 +12,8 @@ const App = () => {
     <Layout>
       <Routes>
         <Route path="/" element={<Home/>}/>
-        <Route path="/albums/:id" element={<Albums/>}/>
-        <Route path="/tracks/:id" element={<Tracks/>}/>
+        <Route path="/artist/:id" element={<Albums/>}/>
+        <Route path="/album/:id" element={<Tracks/>}/>
         <Route path="*" element={<Typography variant="h1">Not found</Typography>}/>
       </Routes>
     </Layout>

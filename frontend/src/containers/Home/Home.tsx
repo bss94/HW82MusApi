@@ -25,12 +25,12 @@ const Home = () => {
       <Grid size={12}>
         <Typography component="h1" variant="h5">Artists</Typography>
       </Grid>
-      {fetching && <Grid size={12}> <CircularProgress sx={{textAlign: 'center'}}/> </Grid>}
+      {fetching && <Grid size={12} sx={{textAlign: 'center'}}> <CircularProgress/> </Grid>}
 
       {artists.length > 0 && artists.map(artist => {
         return (
           <Grid size={3} key={artist._id}>
-            <StyledLink to={`/albums/${artist._id}`}>
+            <StyledLink to={`/artist/${artist._id}`}>
               <ArtistItem name={artist.name} photo={artist.photo} information={artist.information}/>
             </StyledLink>
           </Grid>

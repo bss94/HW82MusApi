@@ -36,21 +36,21 @@ const Albums = () => {
         <Typography component="h1" variant="h5"
                     textTransform="capitalize">{artist && `${artist}\'s`} Albums</Typography>
       </Grid>
-      {fetching && <Grid size={12}> <CircularProgress sx={{textAlign: 'center'}}/> </Grid>}
+      {fetching && <Grid size={12} sx={{textAlign: 'center'}}><CircularProgress/></Grid>}
       {
         albums.length > 0 ?
           albums.map(album => {
             return (
               <Grid size={3} key={album._id}>
-                <StyledLink to={`/tracks/${album._id}`}>
+                <StyledLink to={`/album/${album._id}`}>
                   <AlbumItem title={album.title} image={album.image} date={album.date}/>
                 </StyledLink>
               </Grid>
             );
           })
-          : <Typography component="h1" variant="h5" textTransform="capitalize">{artist && `${artist}\'s`} albums not found
+          :
+          !fetching && <Typography component="h1" variant="h5" textTransform="capitalize">{artist && `${artist}\'s`} Albums not found
             yet</Typography>
-
       }
     </Grid>
   );
