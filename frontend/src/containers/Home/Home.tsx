@@ -1,10 +1,21 @@
 import ArtistItem from '../../components/Artists/ArtistItem.tsx';
 import Grid from '@mui/material/Grid2';
-import {styled, Typography} from '@mui/material';
+import {CircularProgress, styled, Typography} from '@mui/material';
 import {Link} from 'react-router-dom';
+import {useAppDispatch, useAppSelector} from '../../app/hooks.ts';
+import {useEffect} from 'react';
+import {selectArtists, selectArtistsFetching} from '../../store/artistsStore/artistsSlice.ts';
+import {fetchArtists} from '../../store/artistsStore/artistsThunks.ts';
 
 
 const Home = () => {
+  const dispatch = useAppDispatch();
+  const fetching = useAppSelector(selectArtistsFetching);
+  const artists = useAppSelector(selectArtists);
+
+  useEffect(() => {
+    dispatch(fetchArtists());
+  }, [dispatch]);
 
   const StyledLink = styled(Link)({
     textDecoration: 'none',
@@ -12,22 +23,19 @@ const Home = () => {
   return (
     <Grid container spacing={2}>
       <Grid size={12}>
-        <Typography component="h1" variant="h5">Title Home</Typography>
+        <Typography component="h1" variant="h5">Artists</Typography>
       </Grid>
-      <Grid size={3}>
-        <StyledLink to={'/albums/xxx'}>
-          <ArtistItem name={'eminem'} photo={null}/>
-        </StyledLink>
-      </Grid>
-      <Grid size={3}>
-        <ArtistItem name={'eminem'} photo={null}/>
-      </Grid>
-      <Grid size={3}>
-        <ArtistItem name={'eminem'} photo={null}/>
-      </Grid>
-      <Grid size={3}>
-        <ArtistItem name={'eminem'} photo={null}/>
-      </Grid>
+      {fetching && <Grid size={12}> <CircularProgress sx={{textAlign: 'center'}}/> </Grid>}
+
+      {artists.length > 0 && artists.map(artist => {
+        return (
+          <Grid size={3} key={artist._id}>
+            <StyledLink to={`/albums/${artist._id}`}>
+              <ArtistItem name={artist.name} photo={artist.photo} information={artist.information}/>
+            </StyledLink>
+          </Grid>
+        );
+      })}
 
 
     </Grid>
