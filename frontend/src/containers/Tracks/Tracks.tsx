@@ -1,6 +1,6 @@
 import TrackItem from '../../components/Tracks/TrackItem.tsx';
 import Grid from '@mui/material/Grid2';
-import {CircularProgress, Typography} from '@mui/material';
+import {Alert, CircularProgress, Grow, Paper, Typography} from '@mui/material';
 import {useAppDispatch, useAppSelector} from '../../app/hooks.ts';
 import {useParams} from 'react-router-dom';
 import {
@@ -23,11 +23,11 @@ const Tracks = () => {
   const tracks = useAppSelector(selectTracks);
 
   useEffect(() => {
-    dispatch(resetTracks())
+    dispatch(resetTracks());
     if (id) {
       dispatch(fetchTracks(id));
     }
-  }, []);
+  }, [dispatch, id]);
 
   return (
     <Grid container spacing={2}>
@@ -36,23 +36,32 @@ const Tracks = () => {
 
       {artist && album ?
         <Grid size={12}>
-          <Typography component="h1" variant="h5" textTransform='capitalize'>{`${artist}\'s album ${album}`}</Typography>
+          <Typography component="h1" variant="h5"
+                      textTransform="capitalize">{`${artist}s album ${album}`}</Typography>
         </Grid>
         : !fetching && <Grid size={12}>
-          <Typography component="h1" variant="h5">Album and Artist not found</Typography>
-        </Grid>
+        <Typography component="h1" variant="h5">Album and Artist not found</Typography>
+      </Grid>
       }
       {tracks.length > 0 ?
-        tracks.map(track => {
+        tracks.map((track,index) => {
           return (
             <Grid size={12} key={track._id}>
-              <TrackItem trackNumber={track.trackNumber} title={track.title} time={track.time}/>
+              <Grow
+                in={true}
+                style={{transformOrigin: '0 0 0'}}
+                {...{timeout: index * 500}}
+              >
+                <Paper elevation={4}>
+                  <TrackItem trackNumber={track.trackNumber} title={track.title} time={track.time}/>
+                </Paper>
+              </Grow>
             </Grid>
           );
         })
         : !fetching && <Grid size={12}>
-          <Typography component="h1" variant="h5">Have not tracks yet!</Typography>
-        </Grid>
+        <Alert severity="info">Have not track yet</Alert>
+      </Grid>
       }
     </Grid>
   );

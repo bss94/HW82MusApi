@@ -1,6 +1,6 @@
 import AlbumItem from '../../components/Albums/AlbumItem.tsx';
 import Grid from '@mui/material/Grid2';
-import {CircularProgress, styled, Typography} from '@mui/material';
+import {Alert, CircularProgress, Grow, Paper, styled, Typography} from '@mui/material';
 import {Link, useParams} from 'react-router-dom';
 import {useAppDispatch, useAppSelector} from '../../app/hooks.ts';
 import {resetAlbums, selectAlbums, selectAlbumsFetching} from '../../store/albumsStore/albumsSlice.ts';
@@ -25,7 +25,7 @@ const Albums = () => {
     if (id) {
       dispatch(fetchAlbums(id));
     }
-  }, [dispatch]);
+  }, [artists.length, dispatch, id]);
 
   const StyledLink = styled(Link)({
     textDecoration: 'none',
@@ -34,23 +34,30 @@ const Albums = () => {
     <Grid container spacing={2}>
       <Grid size={12}>
         <Typography component="h1" variant="h5"
-                    textTransform="capitalize">{artist && `${artist}\'s`} Albums</Typography>
+                    textTransform="capitalize">{artist && `${artist}s`} Albums</Typography>
       </Grid>
       {fetching && <Grid size={12} sx={{textAlign: 'center'}}><CircularProgress/></Grid>}
       {
         albums.length > 0 ?
-          albums.map(album => {
+          albums.map((album, index) => {
             return (
               <Grid size={3} key={album._id}>
-                <StyledLink to={`/album/${album._id}`}>
-                  <AlbumItem title={album.title} image={album.image} date={album.date}/>
-                </StyledLink>
+                <Grow
+                  in={true}
+                  style={{transformOrigin: '0 0 0'}}
+                  {...{timeout: index * 500}}
+                >
+                  <Paper elevation={4}>
+                    <StyledLink to={`/album/${album._id}`}>
+                      <AlbumItem title={album.title} image={album.image} date={album.date}/>
+                    </StyledLink>
+                  </Paper>
+                </Grow>
               </Grid>
             );
           })
           :
-          !fetching && <Typography component="h1" variant="h5" textTransform="capitalize">{artist && `${artist}\'s`} Albums not found
-            yet</Typography>
+          !fetching && <Alert severity="info"> Albums not found</Alert>
       }
     </Grid>
   );
