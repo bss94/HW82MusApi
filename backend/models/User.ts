@@ -12,6 +12,13 @@ const UserSchema = new Schema<UserFields, UserModel, UserMethods>({
     type: String,
     required: true,
     unique: true,
+    validate: {
+      validator: async function(value: string): Promise<boolean> {
+        const user = await User.findOne({username: value});
+        return !user;
+      },
+      message: 'This user is already registered!',
+    }
   },
   password: {
     type: String,
@@ -37,7 +44,6 @@ UserSchema.pre('save', async function (next) {
   }
   const salt = await bcrypt.genSalt(SALT_WORK_FACTOR);
   this.password = await bcrypt.hash(this.password, salt);
-
   next();
 });
 

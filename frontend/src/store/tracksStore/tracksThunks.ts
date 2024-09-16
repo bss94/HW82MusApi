@@ -6,7 +6,6 @@ export const fetchTracks = createAsyncThunk<AlbumsTracks,string>(
   'tracks/fetchTracks',
   async (albumId)=>{
     const {data:albumsTracks}= await axiosApi.get(`/tracks?album=${albumId}`);
-    console.log(albumsTracks)
     return albumsTracks;
   }
 )
