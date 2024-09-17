@@ -4,8 +4,7 @@ import {Link as RouterLink, useNavigate} from 'react-router-dom';
 import {selectLoginError, selectLoginLoading} from '../../store/usersStore/usersSlice.ts';
 import {RegisterMutation} from '../../types.ts';
 import {login} from '../../store/usersStore/usersThunks.ts';
-import {toast} from 'react-toastify';
-import {Avatar, Box, Link, TextField, Typography} from '@mui/material';
+import {Alert, Avatar, Box, Link, TextField, Typography} from '@mui/material';
 import LockOpenIcon from '@mui/icons-material/LockOpen';
 import Grid from '@mui/material/Grid2';
 import LoginIcon from '@mui/icons-material/Login';
@@ -22,10 +21,6 @@ const Login = () => {
     password: '',
   });
 
-  // const getFieldError = (fieldName: string) => {
-  //   return error?.errors[fieldName]?.message;
-  // };
-
   const inputChangeHandler = (event: React.ChangeEvent<HTMLInputElement>) => {
     const {name, value} = event.target;
     setState((prevState) => ({
@@ -36,12 +31,8 @@ const Login = () => {
 
   const submitFormHandler = async (event: React.FormEvent) => {
     event.preventDefault();
-    try {
-      await dispatch(login(state)).unwrap();
-      navigate('/');
-    } catch (e) {
-      toast.error(error?.error);
-    }
+    await dispatch(login(state)).unwrap();
+    navigate('/');
   };
 
   return (
@@ -59,7 +50,7 @@ const Login = () => {
       <Typography component="h1" variant="h5">
         Sign in
       </Typography>
-      <Box component="form" onSubmit={submitFormHandler} sx={{mt: 3, width:306}}>
+      <Box component="form" onSubmit={submitFormHandler} sx={{mt: 3, width: 306}}>
         <Grid container direction="column" spacing={2}>
           <Grid size={12}>
             <TextField
@@ -96,10 +87,10 @@ const Login = () => {
         >
           <span>Sign in</span>
         </LoadingButton>
-
         <Link component={RouterLink} to="/register" variant="body2">
-         Or Sign up
+          Or Sign up
         </Link>
+        {error && (<Alert severity="error" sx={{mt: 3, width: '100%'}}>{error.error}</Alert>)}
       </Box>
     </Box>
   );
