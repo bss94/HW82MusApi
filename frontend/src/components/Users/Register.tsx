@@ -1,18 +1,21 @@
 import React, {useState} from 'react';
 import {useAppDispatch, useAppSelector} from '../../app/hooks.ts';
 import {Link as RouterLink, useNavigate} from 'react-router-dom';
-import {Avatar, Box, Button, Link, TextField, Typography} from '@mui/material';
+import {Avatar, Box, Link, TextField, Typography} from '@mui/material';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Grid from '@mui/material/Grid2';
 import {RegisterMutation} from '../../types.ts';
 import {register} from '../../store/usersStore/usersThunks.ts';
-import {selectRegisterError} from '../../store/usersStore/usersSlice.ts';
+import {selectRegisterError, selectRegisterLoading} from '../../store/usersStore/usersSlice.ts';
 import {toast} from 'react-toastify';
+import {LoadingButton} from '@mui/lab';
+import LoginIcon from '@mui/icons-material/Login';
 
 const Register = () => {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
   const error = useAppSelector(selectRegisterError);
+  const loading = useAppSelector(selectRegisterLoading);
 
   const [state, setState] = useState<RegisterMutation>({
     username: '',
@@ -56,7 +59,7 @@ const Register = () => {
       <Typography component="h1" variant="h5">
         Sign up
       </Typography>
-      <Box component="form" noValidate onSubmit={submitFormHandler} sx={{mt: 3}}>
+      <Box component="form" noValidate onSubmit={submitFormHandler} sx={{mt: 3, width:306}}>
         <Grid container direction="column" spacing={2}>
           <Grid size={12}>
             <TextField
@@ -86,9 +89,17 @@ const Register = () => {
             />
           </Grid>
         </Grid>
-        <Button type="submit" fullWidth variant="contained" sx={{mt: 3, mb: 2}}>
-          Sign up
-        </Button>
+        <LoadingButton
+          type="submit"
+          loading={loading}
+          loadingPosition="start"
+          startIcon={<LoginIcon/>}
+          fullWidth
+          variant="contained"
+          sx={{mt: 3, mb: 2}}
+        >
+          <span>Sign up</span>
+        </LoadingButton>
         <Link component={RouterLink} to="/login" variant="body2">
           Already have an account? Sign in
         </Link>
