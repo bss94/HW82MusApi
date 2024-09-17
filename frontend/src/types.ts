@@ -41,6 +41,7 @@ export interface RegisterMutation {
   username: string;
   password: string;
 }
+
 export interface LoginMutation {
   username: string;
   password: string;
@@ -64,6 +65,14 @@ export interface ValidationError {
   _message: string;
 }
 
-export interface GlobalError{
-  error:string;
+export interface GlobalError {
+  error: string;
+}
+
+export interface TrackHistory {
+  _id: string;
+  tracks: string;
+  user: string;
+  datetime: Date;
+
 }

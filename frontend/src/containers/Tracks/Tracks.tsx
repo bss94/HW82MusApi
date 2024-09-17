@@ -12,6 +12,9 @@ import {
 } from '../../store/tracksStore/tracksSlice.ts';
 import {useEffect} from 'react';
 import {fetchTracks} from '../../store/tracksStore/tracksThunks.ts';
+import {selectUser} from '../../store/usersStore/usersSlice.ts';
+import {trackHistoryCreate} from '../../store/trackHistoryStore/trackHistoryThunks.ts';
+import {toast} from 'react-toastify';
 
 
 const Tracks = () => {
@@ -21,6 +24,7 @@ const Tracks = () => {
   const album = useAppSelector(selectAlbum);
   const artist = useAppSelector(selectArtist);
   const tracks = useAppSelector(selectTracks);
+  const user = useAppSelector(selectUser);
 
   useEffect(() => {
     dispatch(resetTracks());
@@ -29,10 +33,19 @@ const Tracks = () => {
     }
   }, [dispatch, id]);
 
+  const addToHistory = async (trackId: string) => {
+    try {
+      await dispatch(trackHistoryCreate(trackId)).unwrap();
+      toast.success('Track created');
+    } catch (e) {
+      toast.error('something wrong');
+    }
+
+  };
+
   return (
     <Grid container spacing={2}>
       {fetching && <Grid size={12} sx={{textAlign: 'center'}}> <CircularProgress/></Grid>}
-
 
       {artist && album ?
         <Grid size={12}>
@@ -44,7 +57,7 @@ const Tracks = () => {
       </Grid>
       }
       {tracks.length > 0 ?
-        tracks.map((track,index) => {
+        tracks.map((track, index) => {
           return (
             <Grid size={12} key={track._id}>
               <Grow
@@ -53,7 +66,14 @@ const Tracks = () => {
                 {...{timeout: index * 500}}
               >
                 <Paper elevation={4}>
-                  <TrackItem trackNumber={track.trackNumber} title={track.title} time={track.time}/>
+                  <TrackItem
+                    addToHistory={() => {
+                      addToHistory(track._id);
+                    }}
+                    trackNumber={track.trackNumber}
+                    title={track.title}
+                    time={track.time}
+                    user={user}/>
                 </Paper>
               </Grow>
             </Grid>

@@ -4,7 +4,8 @@ import {albumsReducer} from '../store/albumsStore/albumsSlice.ts';
 import {tracksReducer} from '../store/tracksStore/tracksSlice.ts';
 import {usersReducer} from '../store/usersStore/usersSlice.ts';
 import storage from 'redux-persist/lib/storage';
-import {persistReducer, FLUSH, PAUSE, PERSIST, PURGE, REGISTER, REHYDRATE, persistStore} from 'redux-persist';
+import {FLUSH, PAUSE, PERSIST, persistReducer, persistStore, PURGE, REGISTER, REHYDRATE} from 'redux-persist';
+import {trackHistoryReducer} from '../store/trackHistoryStore/trackHistorySlice.ts';
 
 const userPersistConfig = {
   key: 'musApp:users',
@@ -17,6 +18,7 @@ const rootReducer = combineReducers({
   artists: artistsReducer,
   albums: albumsReducer,
   tracks: tracksReducer,
+  trackHistory: trackHistoryReducer,
   users: persistReducer(userPersistConfig, usersReducer)
 });
 
@@ -31,7 +33,7 @@ export const store = configureStore({
   }
 });
 
-export const persistor = persistStore(store)
+export const persistor = persistStore(store);
 
 export type RootState = ReturnType<typeof store.getState>;
 export type AppDispatch = typeof store.dispatch;
