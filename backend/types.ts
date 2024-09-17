@@ -23,6 +23,7 @@ export interface TrackMutation {
 export interface TrackHistoryMutation {
   user: mongoose.Types.ObjectId;
   track: string;
+  artist: mongoose.Types.ObjectId;
   datetime: Date;
 }
 

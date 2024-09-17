@@ -274,6 +274,7 @@ const run = async () => {
   const history = new TrackHistory({
     user: user,
     track: firstTrack,
+    artist:dreArtist,
     datetime: new Date(),
   });
   await history.save();
@@ -281,6 +282,7 @@ const run = async () => {
   const nextHistory = new TrackHistory({
     user: user,
     track: secondTrack,
+    artist:snoopArtist,
     datetime: new Date(),
   });
   await nextHistory.save();
@@ -288,6 +290,7 @@ const run = async () => {
   const lastHistory = new TrackHistory({
     user: user,
     track: thirdTrack,
+    artist:eminemArtist,
     datetime: new Date(),
   });
   await lastHistory.save();
