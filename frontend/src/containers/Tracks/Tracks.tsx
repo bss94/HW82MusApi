@@ -36,7 +36,7 @@ const Tracks = () => {
   const addToHistory = async (trackId: string) => {
     try {
       await dispatch(trackHistoryCreate(trackId)).unwrap();
-      toast.success('Track created');
+      toast.success('Track history updated');
     } catch (e) {
       toast.error('something wrong');
     }

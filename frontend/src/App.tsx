@@ -6,6 +6,7 @@ import Albums from './containers/Albums/Albums.tsx';
 import Tracks from './containers/Tracks/Tracks.tsx';
 import Register from './components/Users/Register.tsx';
 import Login from './components/Users/Login.tsx';
+import TrackHistory from './containers/TrackHistory/TrackHistory.tsx';
 
 
 const App = () => {
@@ -18,10 +19,11 @@ const App = () => {
         <Route path="/album/:id" element={<Tracks/>}/>
         <Route path="/register" element={<Register/>}/>
         <Route path="/login" element={<Login/>}/>
+        <Route path="/track_history" element={<TrackHistory/>}/>
         <Route path="*" element={<Typography variant="h1">Not found</Typography>}/>
       </Routes>
     </Layout>
-  )
+  );
 };
 
-export default App
+export default App;

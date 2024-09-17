@@ -73,6 +73,25 @@ export interface TrackHistory {
   _id: string;
   tracks: string;
   user: string;
+  artist: string;
   datetime: Date;
+}
+
+export interface THTracks {
+  _id: string;
+  title: string;
+}
+
+export interface THArtist {
+  _id: string;
+  name: string;
+}
+
+export interface ITrackHistory {
+  _id: string;
+  track: THTracks;
+  user: string;
+  artist: THArtist;
+  datetime: string;
 
 }

@@ -1,9 +1,18 @@
 import React, {useState} from 'react';
-import {Button, Menu, MenuItem} from '@mui/material';
+import {Button, Menu, MenuItem, styled} from '@mui/material';
 import {User} from '../../../types.ts';
 import Grid from '@mui/material/Grid2';
 import {logout} from '../../../store/usersStore/usersSlice.ts';
 import {useAppDispatch} from '../../../app/hooks.ts';
+import {Link} from 'react-router-dom';
+
+const StyledLink = styled(Link)({
+  color: 'inherit',
+  textDecoration: 'none',
+  '&:hover': {
+    color: 'inherit',
+  },
+});
 
 interface Props {
   user: User;
@@ -27,6 +36,9 @@ const UserMenu: React.FC<Props> = ({user}) => {
         <MenuItem onClick={() => {
           dispatch(logout());
         }}>Logout</MenuItem>
+        <MenuItem>
+          <StyledLink to="/track_history">Track History</StyledLink>
+        </MenuItem>
       </Menu>
     </Grid>
   );
