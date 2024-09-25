@@ -2,6 +2,7 @@ import express from 'express';
 import Track from '../models/Track';
 import {TrackMutation} from '../types';
 import Album from '../models/Album';
+import auth, {RequestWithUser} from '../middleware/auth';
 
 const tracksRouter = express.Router();
 
@@ -20,8 +21,11 @@ tracksRouter.get('/', async (req, res, next) => {
   }
 });
 
-tracksRouter.post('/', async (req, res, next) => {
+tracksRouter.post('/', auth, async (req: RequestWithUser, res, next) => {
   try {
+    if (!req.user) {
+      return res.status(401).send({error: 'Unauthorized'});
+    }
     const trackMutation: TrackMutation = {
       title: req.body.title,
       album: req.body.album,
@@ -31,6 +35,25 @@ tracksRouter.post('/', async (req, res, next) => {
     const track = new Track(trackMutation);
     await track.save();
     return res.send(track);
+  } catch (error) {
+    return next(error);
+  }
+});
+
+tracksRouter.delete('/:id', auth, async (req: RequestWithUser, res, next) => {
+  try {
+    if (!req.user) {
+      return res.status(401).send({error: 'Unauthorized'});
+    }
+    if (req.user.role !== 'admin') {
+      return res.status(403).send({error: 'User has not right to request!'});
+    }
+    const track = await Track.findById(req.params.id);
+    if (!track) {
+      return res.status(404).send({error: 'Track not found'});
+    }
+    await track.deleteOne();
+    return res.send({deleted: true});
   } catch (error) {
     return next(error);
   }

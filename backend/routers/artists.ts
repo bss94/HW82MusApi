@@ -3,6 +3,7 @@ import mongoose from 'mongoose';
 import Artist from '../models/Artist';
 import {imagesUpload} from '../multer';
 import {ArtistMutation} from '../types';
+import auth, {RequestWithUser} from '../middleware/auth';
 
 const artistsRouter = express.Router();
 
@@ -15,8 +16,11 @@ artistsRouter.get('/', async (req, res, next) => {
   }
 });
 
-artistsRouter.post('/', imagesUpload.single('photo'), async (req, res, next) => {
+artistsRouter.post('/', auth, imagesUpload.single('photo'), async (req: RequestWithUser, res, next) => {
   try {
+    if (!req.user) {
+      return res.status(401).send({error: 'Unauthorized'});
+    }
     const artistMutation: ArtistMutation = {
       name: req.body.name,
       information: req.body.information,

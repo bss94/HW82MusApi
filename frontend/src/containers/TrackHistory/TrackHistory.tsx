@@ -17,7 +17,7 @@ const TrackHistory = () => {
 
   useEffect(() => {
     if (!user) {
-      navigate('/');
+      navigate('/login');
     } else {
       dispatch(fetchTrackHistory());
     }

@@ -3,15 +3,16 @@ import mongoose from 'mongoose';
 import Album from '../models/Album';
 import {imagesUpload} from '../multer';
 import {AlbumMutation} from '../types';
+import auth, {RequestWithUser} from '../middleware/auth';
+import Track from '../models/Track';
 
 const albumsRouter = express.Router();
 
 albumsRouter.get('/', async (req, res, next) => {
   try {
     const artistId = req.query.artist;
-    const albums = await Album.find(artistId ? {artist: artistId} : {}).sort({ date: -1 });
+    const albums = await Album.find(artistId ? {artist: artistId} : {}).sort({date: -1});
     return res.send(albums);
-
   } catch (error) {
     return next(error);
   }
@@ -29,12 +30,15 @@ albumsRouter.get('/:id', async (req, res, next) => {
   }
 });
 
-albumsRouter.post('/', imagesUpload.single('image'), async (req, res, next) => {
+albumsRouter.post('/', auth, imagesUpload.single('image'), async (req: RequestWithUser, res, next) => {
   try {
+    if (!req.user) {
+      return res.status(401).send({error: 'Unauthorized'});
+    }
     const albumMutation: AlbumMutation = {
       title: req.body.title,
       artist: req.body.artist,
-      date:  parseFloat(req.body.date),
+      date: parseFloat(req.body.date),
       image: req.file ? req.file.filename : null,
     };
     const album = new Album(albumMutation);
@@ -44,6 +48,32 @@ albumsRouter.post('/', imagesUpload.single('image'), async (req, res, next) => {
     if (error instanceof mongoose.Error.ValidationError) {
       return res.status(400).send(error);
     }
+    return next(error);
+  }
+});
+
+albumsRouter.delete('/:id', auth, async (req: RequestWithUser, res, next) => {
+  try {
+    if (!req.user) {
+      return res.status(401).send({error: 'Unauthorized'});
+    }
+    if (req.user.role !== 'admin') {
+      return res.status(403).send({error: 'User has not right to request!'});
+    }
+    const album = await Album.findById(req.params.id);
+    if (!album) {
+      return res.status(404).send({error: 'Album not found'});
+    }
+    const tracks = await Track.find({album: album._id});
+    if (tracks) {
+      const trackIds: string[] = tracks.map(track => {
+        return track._id.toString();
+      });
+      await Track.deleteMany({_id: trackIds});
+    }
+    await album.deleteOne();
+    return res.send({deleted: true});
+  } catch (error) {
     return next(error);
   }
 });

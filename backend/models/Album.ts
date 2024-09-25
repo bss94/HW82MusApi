@@ -25,12 +25,29 @@ const AlbumSchema = new Schema({
     required: true,
     validate: {
       validator: async (value: number) => {
-        return value>1900;
+        return value > 1900;
       },
       message: 'Date is invalid! entered value must be bigger than 1900',
     },
   },
   image: String,
+  // publisher:{
+  //   type: Schema.Types.ObjectId,
+  //   ref: 'User',
+  //   required: true,
+  //   validate: {
+  //     validator: async (value: Types.ObjectId) => {
+  //       const user = await User.findById(value);
+  //       return Boolean(user);
+  //     },
+  //     message: 'User does not exist',
+  //   },
+  // },
+  isPublished: {
+    type: Boolean,
+    required: true,
+    default: false,
+  },
 });
 
 const Album = mongoose.model('Album', AlbumSchema);

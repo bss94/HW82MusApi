@@ -13,9 +13,9 @@ const UserSchema = new Schema<UserFields, UserModel, UserMethods>({
     required: true,
     unique: true,
     validate: {
-      validator: async function(value: string): Promise<boolean> {
-        if(!(this as HydratedDocument<UserFields>).isModified('username')){
-        return true
+      validator: async function (value: string): Promise<boolean> {
+        if (!(this as HydratedDocument<UserFields>).isModified('username')) {
+          return true;
         }
         const user = await User.findOne({username: value});
         return !user;
@@ -30,7 +30,13 @@ const UserSchema = new Schema<UserFields, UserModel, UserMethods>({
   token: {
     type: String,
     required: true,
-  }
+  },
+  role: {
+    type: String,
+    required: true,
+    default: 'user',
+    enum: ['user', 'admin'],
+  },
 });
 
 UserSchema.methods.checkPassword = function (password) {
