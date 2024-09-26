@@ -3,6 +3,7 @@ import Track from '../models/Track';
 import {TrackMutation} from '../types';
 import Album from '../models/Album';
 import auth, {RequestWithUser} from '../middleware/auth';
+import {clearTrackHistories} from '../constants';
 
 const tracksRouter = express.Router();
 
@@ -30,7 +31,8 @@ tracksRouter.post('/', auth, async (req: RequestWithUser, res, next) => {
       title: req.body.title,
       album: req.body.album,
       time: req.body.time,
-      trackNumber: req.body.trackNumber
+      trackNumber: req.body.trackNumber,
+      publisher: req.user._id,
     };
     const track = new Track(trackMutation);
     await track.save();
@@ -47,7 +49,8 @@ tracksRouter.delete('/:id', auth, async (req: RequestWithUser, res, next) => {
     }
     const track = await Track.findById(req.params.id);
     if (track) {
-      if (req.user.role !== 'admin' || (req.user._id === track.publisher && !track.isPublished)) {
+      if (req.user.role === 'admin' || (req.user._id === track.publisher && !track.isPublished)) {
+        await clearTrackHistories(track._id);
         await track.deleteOne();
         return res.send({deleted: true});
       } else {
@@ -70,16 +73,16 @@ tracksRouter.patch('/:id/togglePublished', auth, async (req: RequestWithUser, re
       return res.status(403).send({error: 'User has not right to request!'});
     }
     const track = await Track.findById(req.params.id);
-    if(!track){
+    if (!track) {
       return res.status(404).send({error: 'Track not found'});
     }
     await track.updateOne({isPublished: !track.isPublished});
     return res.send({patched: true});
 
-  }catch (error) {
+  } catch (error) {
     next(error);
   }
-})
+});
 
 
 export default tracksRouter;

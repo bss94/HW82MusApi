@@ -4,8 +4,7 @@ import Album from '../models/Album';
 import {imagesUpload} from '../multer';
 import {AlbumMutation} from '../types';
 import auth, {RequestWithUser} from '../middleware/auth';
-import Track from '../models/Track';
-import Artist from '../models/Artist';
+import {clearTracksAndChildren} from '../constants';
 
 const albumsRouter = express.Router();
 
@@ -41,6 +40,7 @@ albumsRouter.post('/', auth, imagesUpload.single('image'), async (req: RequestWi
       artist: req.body.artist,
       date: parseFloat(req.body.date),
       image: req.file ? req.file.filename : null,
+      publisher: req.user._id,
     };
     const album = new Album(albumMutation);
     await album.save();
@@ -61,13 +61,7 @@ albumsRouter.delete('/:id', auth, async (req: RequestWithUser, res, next) => {
     const album = await Album.findById(req.params.id);
     if (album) {
       if (req.user.role === 'admin' || (album.publisher === req.user._id && !album.isPublished)) {
-        const tracks = await Track.find({album: album._id});
-        if (tracks) {
-          const trackIds: string[] = tracks.map(track => {
-            return track._id.toString();
-          });
-          await Track.deleteMany({_id: trackIds});
-        }
+        await clearTracksAndChildren(album._id);
         await album.deleteOne();
         return res.send({deleted: true});
       } else {
@@ -90,16 +84,16 @@ albumsRouter.patch('/:id/togglePublished', auth, async (req: RequestWithUser, re
       return res.status(403).send({error: 'User has not right to request!'});
     }
     const album = await Album.findById(req.params.id);
-    if(!album){
+    if (!album) {
       return res.status(404).send({error: 'Album not found'});
     }
     await album.updateOne({isPublished: !album.isPublished});
     return res.send({patched: true});
 
-  }catch (error) {
+  } catch (error) {
     next(error);
   }
-})
+});
 
 
 export default albumsRouter;

@@ -4,6 +4,7 @@ export interface ArtistMutation {
   name: string;
   information: string;
   photo: string | null;
+  publisher: mongoose.Types.ObjectId;
 }
 
 export interface AlbumMutation {
@@ -11,6 +12,7 @@ export interface AlbumMutation {
   artist: string;
   date: number;
   image: string | null;
+  publisher: mongoose.Types.ObjectId;
 }
 
 export interface TrackMutation {
@@ -18,6 +20,7 @@ export interface TrackMutation {
   album: string;
   time: string;
   trackNumber: number;
+  publisher: mongoose.Types.ObjectId;
 }
 
 export interface TrackHistoryMutation {
@@ -31,7 +34,7 @@ export interface UserFields {
   username: string;
   password: string;
   token: string;
-  role:string
+  role: string;
 }
 
 export interface UserMethods {
