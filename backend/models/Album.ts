@@ -1,5 +1,6 @@
 import mongoose, {Types} from 'mongoose';
 import Artist from './Artist';
+import User from './User';
 
 const Schema = mongoose.Schema;
 
@@ -31,18 +32,18 @@ const AlbumSchema = new Schema({
     },
   },
   image: String,
-  // publisher:{
-  //   type: Schema.Types.ObjectId,
-  //   ref: 'User',
-  //   required: true,
-  //   validate: {
-  //     validator: async (value: Types.ObjectId) => {
-  //       const user = await User.findById(value);
-  //       return Boolean(user);
-  //     },
-  //     message: 'User does not exist',
-  //   },
-  // },
+  publisher: {
+    type: Schema.Types.ObjectId,
+    ref: 'User',
+    required: true,
+    validate: {
+      validator: async (value: Types.ObjectId) => {
+        const user = await User.findById(value);
+        return Boolean(user);
+      },
+      message: 'User does not exist',
+    },
+  },
   isPublished: {
     type: Boolean,
     required: true,

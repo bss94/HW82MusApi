@@ -4,6 +4,8 @@ import Artist from '../models/Artist';
 import {imagesUpload} from '../multer';
 import {ArtistMutation} from '../types';
 import auth, {RequestWithUser} from '../middleware/auth';
+import Album from '../models/Album';
+import Track from '../models/Track';
 
 const artistsRouter = express.Router();
 
@@ -36,6 +38,57 @@ artistsRouter.post('/', auth, imagesUpload.single('photo'), async (req: RequestW
     return next(error);
   }
 });
+artistsRouter.delete('/:id', auth, async (req: RequestWithUser, res, next) => {
+  try {
+    if (!req.user) {
+      return res.status(401).send({error: 'Unauthorized'});
+    }
+    const artist = await Artist.findById(req.params.id);
+    if (artist) {
+      if (req.user.role === 'admin' || (req.user._id === artist.publisher && !artist.isPublished)) {
+        const albums = await Album.find({artist: artist._id});
+        if (albums) {
+          const albumsIds: string[] = albums.map(album => album._id.toString());
+          const tracks = await Track.find({album: albumsIds});
+          if (tracks) {
+            const trackIds: string[] = tracks.map(track => track._id.toString());
+            await Track.deleteMany({_id: trackIds});
+          }
+          await Album.deleteMany({_id: albumsIds});
+        }
+
+        await artist.deleteOne();
+        return res.send({deleted: true});
+      } else {
+        return res.status(403).send({error: 'User has not right to request!'});
+      }
+    } else {
+      return res.status(404).send({error: 'Artist not found'});
+    }
+  } catch (error) {
+    return next(error);
+  }
+});
+
+artistsRouter.patch('/:id/togglePublished', auth, async (req: RequestWithUser, res, next) => {
+  try {
+    if (!req.user) {
+      return res.status(401).send({error: 'Unauthorized'});
+    }
+    if (req.user.role !== 'admin') {
+      return res.status(403).send({error: 'User has not right to request!'});
+    }
+    const artist = await Artist.findById(req.params.id);
+    if(!artist){
+      return res.status(404).send({error: 'Artist not found'});
+    }
+    await artist.updateOne({isPublished: !artist.isPublished});
+    return res.send({patched: true});
+
+  }catch (error) {
+    next(error);
+  }
+})
 
 
 export default artistsRouter;
