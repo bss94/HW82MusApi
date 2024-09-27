@@ -2,9 +2,10 @@ import React, {useState} from 'react';
 import {Button, Menu, MenuItem, styled} from '@mui/material';
 import {User} from '../../../types.ts';
 import Grid from '@mui/material/Grid2';
-import {logout} from '../../../store/usersStore/usersSlice.ts';
+
 import {useAppDispatch} from '../../../app/hooks.ts';
 import {Link} from 'react-router-dom';
+import {logout} from '../../../store/usersStore/usersThunks.ts';
 
 const StyledLink = styled(Link)({
   color: 'inherit',
@@ -38,6 +39,15 @@ const UserMenu: React.FC<Props> = ({user}) => {
         }}>Logout</MenuItem>
         <MenuItem>
           <StyledLink to="/track_history">Track History</StyledLink>
+        </MenuItem>
+        <MenuItem>
+          <StyledLink to="/new-artist">Create artist</StyledLink>
+        </MenuItem>
+        <MenuItem>
+          <StyledLink to="/new-album">Create album</StyledLink>
+        </MenuItem>
+        <MenuItem>
+          <StyledLink to="/new-track">Create track</StyledLink>
         </MenuItem>
       </Menu>
     </Grid>

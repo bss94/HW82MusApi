@@ -8,6 +8,7 @@ import {useEffect} from 'react';
 import {fetchAlbums} from '../../store/albumsStore/albumsThunks.ts';
 import {fetchArtists} from '../../store/artistsStore/artistsThunks.ts';
 import {selectArtists} from '../../store/artistsStore/artistsSlice.ts';
+import {selectUser} from '../../store/usersStore/usersSlice.ts';
 
 const Albums = () => {
   const dispatch = useAppDispatch();
@@ -16,6 +17,7 @@ const Albums = () => {
   const albums = useAppSelector(selectAlbums);
   const artists = useAppSelector(selectArtists);
   const artist = artists.find(artist => artist._id === id)?.name;
+  const user = useAppSelector(selectUser);
 
   useEffect(() => {
     dispatch(resetAlbums());
@@ -40,6 +42,7 @@ const Albums = () => {
       {
         albums.length > 0 ?
           albums.map((album, index) => {
+            if (album.isPublished || album.publisher === user?._id || user?.role === 'admin') {
             return (
               <Grid size={3} key={album._id}>
                 <Grow
@@ -54,7 +57,7 @@ const Albums = () => {
                   </Paper>
                 </Grow>
               </Grid>
-            );
+            );}
           })
           :
           !fetching && <Alert severity="info"> Albums not found</Alert>

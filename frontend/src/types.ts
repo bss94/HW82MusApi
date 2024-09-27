@@ -57,6 +57,7 @@ export interface User {
   _id: string;
   username: string;
   token: string;
+  role:string
 }
 
 export interface ValidationError {
@@ -100,4 +101,16 @@ export interface ITrackHistory {
   artist: THArtist;
   datetime: string;
 
+}
+
+export interface ArtistMutation {
+  name: string;
+  information: string;
+  photo: File | null;
+}
+export interface AlbumMutation {
+  artist: string;
+  title: string;
+  date: number;
+  image: File | null;
 }

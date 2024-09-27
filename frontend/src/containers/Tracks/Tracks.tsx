@@ -58,6 +58,7 @@ const Tracks = () => {
       }
       {tracks.length > 0 ?
         tracks.map((track, index) => {
+          if (track.isPublished || track.publisher === user?._id || user?.role === 'admin') {
           return (
             <Grid size={12} key={track._id}>
               <Grow
@@ -77,7 +78,7 @@ const Tracks = () => {
                 </Paper>
               </Grow>
             </Grid>
-          );
+          );}
         })
         : !fetching && <Grid size={12}>
         <Alert severity="info">Have not track yet</Alert>

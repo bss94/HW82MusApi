@@ -6,12 +6,14 @@ import {useAppDispatch, useAppSelector} from '../../app/hooks.ts';
 import {useEffect} from 'react';
 import {selectArtists, selectArtistsFetching} from '../../store/artistsStore/artistsSlice.ts';
 import {fetchArtists} from '../../store/artistsStore/artistsThunks.ts';
+import {selectUser} from '../../store/usersStore/usersSlice.ts';
 
 
 const Home = () => {
   const dispatch = useAppDispatch();
   const fetching = useAppSelector(selectArtistsFetching);
   const artists = useAppSelector(selectArtists);
+  const user = useAppSelector(selectUser);
 
   useEffect(() => {
     dispatch(fetchArtists());
@@ -29,21 +31,23 @@ const Home = () => {
       {fetching && <Grid size={12} sx={{textAlign: 'center'}}> <CircularProgress/> </Grid>}
 
       {artists.length > 0 && artists.map((artist, index) => {
-        return (
-          <Grid size={3} key={artist._id}>
-            <Grow
-              in={true}
-              style={{transformOrigin: '0 0 0'}}
-              {...{timeout: index * 500}}
-            >
-              <Paper elevation={4}>
-                <StyledLink to={`/artist/${artist._id}`}>
-                  <ArtistItem name={artist.name} photo={artist.photo} information={artist.information}/>
-                </StyledLink>
-              </Paper>
-            </Grow>
-          </Grid>
-        );
+        if (artist.isPublished || artist.publisher === user?._id || user?.role === 'admin') {
+          return (
+            <Grid size={3} key={artist._id}>
+              <Grow
+                in={true}
+                style={{transformOrigin: '0 0 0'}}
+                {...{timeout: index * 500}}
+              >
+                <Paper elevation={4}>
+                  <StyledLink to={`/artist/${artist._id}`}>
+                    <ArtistItem name={artist.name} photo={artist.photo} information={artist.information}/>
+                  </StyledLink>
+                </Paper>
+              </Grow>
+            </Grid>
+          );
+        }
       })}
 
     </Grid>
