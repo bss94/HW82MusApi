@@ -8,6 +8,7 @@ export interface AlbumsState {
   albumsFetching: boolean;
   albumCreating: boolean;
   deletingAlbum:string|false;
+  publishingAlbum:string|false;
 }
 
 const initialState: AlbumsState = {
@@ -15,6 +16,7 @@ const initialState: AlbumsState = {
   albumsFetching: false,
   albumCreating: false,
   deletingAlbum: false,
+  publishingAlbum:false
 };
 
 export const albumsSlice = createSlice({
@@ -59,7 +61,8 @@ export const albumsSlice = createSlice({
     selectAlbums: (state) => state.albums,
     selectAlbumsFetching: (state) => state.albumsFetching,
     selectAlbumCreating: (state) => state.albumCreating,
-    selectAlbumDeleting: (state) => state.deletingAlbum
+    selectAlbumDeleting: (state) => state.deletingAlbum,
+    selectAlbumPublishing: (state) => state.publishingAlbum
   }
 });
 
@@ -68,6 +71,7 @@ export const {
   selectAlbums,
   selectAlbumsFetching,
   selectAlbumCreating,
-  selectAlbumDeleting
+  selectAlbumDeleting,
+  selectAlbumPublishing
 } = albumsSlice.selectors;
 export const {resetAlbums} = albumsSlice.actions;

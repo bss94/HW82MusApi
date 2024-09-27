@@ -37,6 +37,12 @@ const UserMenu: React.FC<Props> = ({user}) => {
         <MenuItem onClick={() => {
           dispatch(logout());
         }}>Logout</MenuItem>
+        {
+          user.role === 'admin' &&
+          <MenuItem>
+            <StyledLink to="/admins">Admin</StyledLink>
+          </MenuItem>
+        }
         <MenuItem>
           <StyledLink to="/track_history">Track History</StyledLink>
         </MenuItem>

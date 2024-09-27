@@ -33,3 +33,10 @@ export const deleteArtist = createAsyncThunk<void, string, { state: RootState }>
     await axiosApi.delete(`/artists/${id}`, {headers: {'Authorization': `Bearer ${token}`}});
   }
 );
+export const toggleArtistPublic = createAsyncThunk<void, string, { state: RootState }>(
+  'artists/toggleArtistPublic',
+  async (id, {getState}) => {
+    const token = getState().users.user?.token;
+    await axiosApi.patch(`/artists/${id}/togglePublished`,{} ,{headers: {'Authorization': `Bearer ${token}`}});
+  }
+);

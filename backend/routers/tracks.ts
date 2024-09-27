@@ -16,7 +16,7 @@ tracksRouter.get('/', async (req, res, next) => {
       return res.send({album: album, tracks: tracks});
     }
     const tracks = await Track.find();
-    return res.send(tracks);
+    return res.send({album: null, tracks: tracks});
   } catch (error) {
     return next(error);
   }

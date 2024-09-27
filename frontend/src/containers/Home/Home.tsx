@@ -1,6 +1,6 @@
 import ArtistItem from '../../components/Artists/ArtistItem.tsx';
 import Grid from '@mui/material/Grid2';
-import {CircularProgress, Grow, Paper, Typography} from '@mui/material';
+import {Alert, CircularProgress, Grow, Paper, Typography} from '@mui/material';
 import {useAppDispatch, useAppSelector} from '../../app/hooks.ts';
 import {useEffect} from 'react';
 import {selectArtists, selectArtistsFetching} from '../../store/artistsStore/artistsSlice.ts';
@@ -36,7 +36,7 @@ const Home = () => {
       </Grid>
       {fetching && <Grid size={12} sx={{textAlign: 'center'}}> <CircularProgress/> </Grid>}
 
-      {artists.length > 0 && artists.map((artist, index) => {
+      {artists.length > 0 ? artists.map((artist, index) => {
         if (artist.isPublished || artist.publisher === user?._id || user?.role === 'admin') {
           return (
             <Grid size={3} key={artist._id}>
@@ -52,7 +52,9 @@ const Home = () => {
             </Grid>
           );
         }
-      })}
+      })
+      :!fetching && <Alert severity="info"> Artist not found</Alert>
+      }
     </Grid>
   );
 };

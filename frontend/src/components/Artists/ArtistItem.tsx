@@ -12,22 +12,22 @@ import {selectArtistDeleting} from '../../store/artistsStore/artistsSlice.ts';
 
 
 interface Props {
-  artist:Artist;
-  user:User|null;
-  deleteArtist:MouseEventHandler;
+  artist: Artist;
+  user: User | null;
+  deleteArtist: MouseEventHandler;
 }
 
 const ArtistItem: React.FC<Props> = ({
-  artist,user,deleteArtist
+  artist, user, deleteArtist
 }) => {
-  const deleting = useAppSelector(selectArtistDeleting)
+  const deleting = useAppSelector(selectArtistDeleting);
   return (
-    <Card sx={{textAlign: 'center',bgcolor: artist.isPublished ? 'inherit' : 'rgba(186,186,186,0.3)'}}>
+    <Card sx={{textAlign: 'center', bgcolor: artist.isPublished ? 'inherit' : 'rgba(186,186,186,0.3)'}}>
       <CardMedia
-        sx={{height: 200}}
+        sx={{height: 250}}
         image={artist.photo ? `${API_URL}/${artist.photo}` : imageNotFound}
       />
-      <CardContent sx={{p:1}}>
+      <CardContent sx={{p: 1}}>
         <Typography gutterBottom variant="h6" component="div" sx={{textTransform: 'capitalize'}}>
           {artist.name} {!artist.isPublished && '(Unpublished)'}
         </Typography>
@@ -38,7 +38,7 @@ const ArtistItem: React.FC<Props> = ({
       </CardContent>
       <CardActions sx={{justifyContent: 'space-between', alignItems: 'center'}}>
         <IconButton component={Link} to={`/artist/${artist._id}`}>
-          <ArrowForwardIcon />
+          <ArrowForwardIcon/>
         </IconButton>
         {!artist.isPublished && (artist.publisher === user?._id || user?.role === 'admin') &&
           <LoadingButton

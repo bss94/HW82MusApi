@@ -62,11 +62,8 @@ artistsRouter.delete('/:id', auth, async (req: RequestWithUser, res, next) => {
 
 artistsRouter.patch('/:id/togglePublished', auth, async (req: RequestWithUser, res, next) => {
   try {
-    if (!req.user) {
+    if (!req.user || req.user.role !== 'admin') {
       return res.status(401).send({error: 'Unauthorized'});
-    }
-    if (req.user.role !== 'admin') {
-      return res.status(403).send({error: 'User has not right to request!'});
     }
     const artist = await Artist.findById(req.params.id);
     if (!artist) {

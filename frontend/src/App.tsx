@@ -13,6 +13,10 @@ import {selectUser} from './store/usersStore/usersSlice.ts';
 import ArtistForm from './components/Artists/ArtistForm.tsx';
 import AlbumForm from './components/Albums/AlbumForm.tsx';
 import TrackForm from './components/Tracks/TrackForm.tsx';
+import Admins from './containers/Admins/Admins.tsx';
+import AdminsArtists from './components/Admins/AdminsArtists.tsx';
+import AdminsAlbums from './components/Admins/AdminsAlbums.tsx';
+import AdminsTracks from './components/Admins/AdminsTracks.tsx';
 
 
 const App = () => {
@@ -33,9 +37,27 @@ const App = () => {
             <AlbumForm user={user}/>
           </ProtectedRoute>}/>
         <Route path="/new-track" element={
-          <ProtectedRoute isAllowed={user && (user.role === 'admin' || user.role === 'user')}>
+          <ProtectedRoute isAllowed={user !== null}>
             <TrackForm user={user}/>
           </ProtectedRoute>}/>
+        <Route path="/admins" element={
+          <ProtectedRoute isAllowed={user && user.role === 'admin'}>
+            <Admins/>
+          </ProtectedRoute>}>
+          <Route
+            path="artists"
+            element={<AdminsArtists/>}
+          />
+          <Route
+            path="albums"
+            element={<AdminsAlbums/>}
+          />
+          <Route
+            path="tracks"
+            element={<AdminsTracks/>}
+          />
+
+        </Route>
         <Route path="/register" element={<Register/>}/>
         <Route path="/login" element={<Login/>}/>
         <Route path="/track_history" element={<TrackHistory/>}/>

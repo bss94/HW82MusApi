@@ -13,18 +13,18 @@ import {selectAlbumDeleting} from '../../store/albumsStore/albumsSlice.ts';
 interface Props {
   album: Album;
   user: User | null;
-  deleteAlbum:MouseEventHandler;
+  deleteAlbum: MouseEventHandler;
 }
 
 const AlbumItem: React.FC<Props> = ({
-  album, user,deleteAlbum,
+  album, user, deleteAlbum,
 }) => {
   const deleting = useAppSelector(selectAlbumDeleting);
 
   return (
-    <Card sx={{maxWidth: 250, textAlign: 'center', bgcolor: album.isPublished ? 'inherit' : 'rgba(186,186,186,0.3)'}}>
+    <Card sx={{textAlign: 'center', bgcolor: album.isPublished ? 'inherit' : 'rgba(186,186,186,0.3)'}}>
       <CardMedia
-        sx={{height: 200}}
+        sx={{height: 250}}
         image={album.image ? `${API_URL}/${album.image}` : imageNotFound}
       />
       <CardContent sx={{p: 1}}>

@@ -43,7 +43,6 @@ const TrackForm: React.FC<Props> = ({user}) => {
   const submitFormHandler = async (event: React.FormEvent) => {
     event.preventDefault();
     try {
-      console.log(state);
       await dispatch(createTracks({
         ...state,
         title: state.title.trim()

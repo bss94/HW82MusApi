@@ -1,12 +1,13 @@
 import {createSlice} from '@reduxjs/toolkit';
 import {Artist} from '../../types.ts';
-import {createArtists, deleteArtist, fetchArtists} from './artistsThunks.ts';
+import {createArtists, deleteArtist, fetchArtists, toggleArtistPublic} from './artistsThunks.ts';
 
 export interface ArtistsState {
   artists: Artist[];
   artistsFetching: boolean;
   artistsCreating: boolean;
   deletingArtist:string|false;
+  publicationArtist: string|false;
 }
 
 const initialState: ArtistsState = {
@@ -14,6 +15,7 @@ const initialState: ArtistsState = {
   artistsFetching: false,
   artistsCreating: false,
   deletingArtist: false,
+  publicationArtist:false
 };
 
 export const artistsSlice = createSlice({
@@ -49,13 +51,23 @@ export const artistsSlice = createSlice({
       .addCase(deleteArtist.fulfilled, (state) => {
         state.deletingArtist = false;
       });
+    builder.addCase(toggleArtistPublic.pending, (state,{meta:{arg:id}}) => {
+      state.publicationArtist = id;
+    })
+      .addCase(toggleArtistPublic.rejected, (state) => {
+        state.publicationArtist = false;
+      })
+      .addCase(toggleArtistPublic.fulfilled, (state) => {
+        state.publicationArtist = false;
+      });
 
   },
   selectors: {
     selectArtists: (state) => state.artists,
     selectArtistsFetching: (state) => state.artistsFetching,
     selectArtistCreating: (state) => state.artistsCreating,
-    selectArtistDeleting:(state)=>state.deletingArtist
+    selectArtistDeleting:(state)=>state.deletingArtist,
+    selectPublishArtist:(state)=>state.publicationArtist,
   }
 });
 
@@ -64,5 +76,6 @@ export const {
   selectArtists,
   selectArtistsFetching,
   selectArtistCreating,
-  selectArtistDeleting
+  selectArtistDeleting,
+  selectPublishArtist
 } = artistsSlice.selectors;
