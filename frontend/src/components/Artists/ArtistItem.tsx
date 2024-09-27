@@ -1,34 +1,57 @@
-import React from 'react';
-import {Card, CardContent, CardMedia, Typography} from '@mui/material';
+import React, {MouseEventHandler} from 'react';
+import {Card, CardActions, CardContent, CardMedia, IconButton, Typography} from '@mui/material';
 import {API_URL} from '../../constants.ts';
 import imageNotFound from '../../assets/images/image-not-found.png';
+import {Link} from 'react-router-dom';
+import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
+import {LoadingButton} from '@mui/lab';
+import DeleteIcon from '@mui/icons-material/Delete';
+import {Artist, User} from '../../types.ts';
+import {useAppSelector} from '../../app/hooks.ts';
+import {selectArtistDeleting} from '../../store/artistsStore/artistsSlice.ts';
 
 
 interface Props {
-  name: string;
-  information?: string;
-  photo: string | null;
+  artist:Artist;
+  user:User|null;
+  deleteArtist:MouseEventHandler;
 }
 
 const ArtistItem: React.FC<Props> = ({
-  name, photo, information
+  artist,user,deleteArtist
 }) => {
+  const deleting = useAppSelector(selectArtistDeleting)
   return (
-    <Card sx={{textAlign: 'center'}}>
+    <Card sx={{textAlign: 'center',bgcolor: artist.isPublished ? 'inherit' : 'rgba(186,186,186,0.3)'}}>
       <CardMedia
         sx={{height: 200}}
-        image={photo ? `${API_URL}/${photo}` : imageNotFound}
+        image={artist.photo ? `${API_URL}/${artist.photo}` : imageNotFound}
       />
-      <CardContent>
-        <Typography gutterBottom variant="h5" component="div" sx={{textTransform: 'capitalize'}}>
-          {name}
+      <CardContent sx={{p:1}}>
+        <Typography gutterBottom variant="h6" component="div" sx={{textTransform: 'capitalize'}}>
+          {artist.name} {!artist.isPublished && '(Unpublished)'}
         </Typography>
-        {information &&
+        {artist.information &&
           <Typography variant="body2" sx={{color: 'text.secondary'}}>
-            {information}
+            {artist.information}
           </Typography>}
-
       </CardContent>
+      <CardActions sx={{justifyContent: 'space-between', alignItems: 'center'}}>
+        <IconButton component={Link} to={`/artist/${artist._id}`}>
+          <ArrowForwardIcon />
+        </IconButton>
+        {!artist.isPublished && (artist.publisher === user?._id || user?.role === 'admin') &&
+          <LoadingButton
+            loading={deleting === artist._id}
+            loadingPosition="center"
+            variant="text"
+            color="error"
+            onClick={deleteArtist}
+          >
+            <DeleteIcon/>
+          </LoadingButton>
+        }
+      </CardActions>
     </Card>
   );
 };

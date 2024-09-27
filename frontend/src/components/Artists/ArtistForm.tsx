@@ -23,11 +23,11 @@ const ArtistForm = () => {
   const submitFormHandler = async (event: React.FormEvent) => {
     event.preventDefault();
     try {
-      await dispatch(createArtists(state)).unwrap()
-      toast.success('Artist created')
-      navigate('/')
-    }catch (error){
-      toast.error('An error occurred while creating artists'+ (error as Error).message);
+      await dispatch(createArtists(state)).unwrap();
+      toast.success('Artist created');
+      navigate('/');
+    } catch (error) {
+      toast.error('An error occurred while creating artists' + (error as Error).message);
     }
   };
 

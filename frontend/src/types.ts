@@ -4,7 +4,7 @@ export interface Artist {
   information?: string;
   photo: string | null;
   isPublished: boolean;
-  publisher:string;
+  publisher: string;
 }
 
 export interface Album {
@@ -14,7 +14,7 @@ export interface Album {
   date: number;
   image: string | null;
   isPublished: boolean;
-  publisher:string;
+  publisher: string;
 }
 
 export interface Track {
@@ -24,7 +24,7 @@ export interface Track {
   time: string;
   trackNumber: number;
   isPublished: boolean;
-  publisher:string;
+  publisher: string;
 }
 
 export interface AlbumsArtist {
@@ -57,7 +57,7 @@ export interface User {
   _id: string;
   username: string;
   token: string;
-  role:string
+  role: string;
 }
 
 export interface ValidationError {
@@ -108,9 +108,17 @@ export interface ArtistMutation {
   information: string;
   photo: File | null;
 }
+
 export interface AlbumMutation {
   artist: string;
   title: string;
   date: number;
   image: File | null;
+}
+
+export interface TrackMutation {
+  title: string;
+  album: string;
+  time: string;
+  trackNumber: number;
 }

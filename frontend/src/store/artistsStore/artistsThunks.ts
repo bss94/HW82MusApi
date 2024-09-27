@@ -26,3 +26,10 @@ export const createArtists = createAsyncThunk<void, ArtistMutation, { state: Roo
     await axiosApi.post('/artists', formData, {headers: {'Authorization': `Bearer ${token}`}});
   }
 );
+export const deleteArtist = createAsyncThunk<void, string, { state: RootState }>(
+  'artists/deleteArtist',
+  async (id, {getState}) => {
+    const token = getState().users.user?.token;
+    await axiosApi.delete(`/artists/${id}`, {headers: {'Authorization': `Bearer ${token}`}});
+  }
+);

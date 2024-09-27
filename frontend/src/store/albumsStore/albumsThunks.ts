@@ -25,3 +25,11 @@ export const createAlbums = createAsyncThunk<void, AlbumMutation, { state: RootS
     await axiosApi.post('/albums', formData, {headers: {'Authorization': `Bearer ${token}`}});
   }
 );
+
+export const deleteAlbum = createAsyncThunk<void, string, { state: RootState }>(
+  'albums/deleteAlbum',
+  async (id, {getState}) => {
+    const token = getState().users.user?.token;
+    await axiosApi.delete(`/albums/${id}`, {headers: {'Authorization': `Bearer ${token}`}});
+  }
+);

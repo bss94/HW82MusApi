@@ -1,5 +1,5 @@
 import {createSlice} from '@reduxjs/toolkit';
-import {createAlbums, fetchAlbums} from './albumsThunks.ts';
+import {createAlbums, deleteAlbum, fetchAlbums} from './albumsThunks.ts';
 import {Album} from '../../types.ts';
 
 
@@ -7,12 +7,14 @@ export interface AlbumsState {
   albums: Album[];
   albumsFetching: boolean;
   albumCreating: boolean;
+  deletingAlbum:string|false;
 }
 
 const initialState: AlbumsState = {
   albums: [],
   albumsFetching: false,
-  albumCreating: false
+  albumCreating: false,
+  deletingAlbum: false,
 };
 
 export const albumsSlice = createSlice({
@@ -43,11 +45,21 @@ export const albumsSlice = createSlice({
       .addCase(createAlbums.rejected, (state) => {
         state.albumCreating = false;
       });
+    builder.addCase(deleteAlbum.pending, (state,{meta:{arg:id}}) => {
+      state.deletingAlbum = id;
+    })
+      .addCase(deleteAlbum.fulfilled, (state) => {
+        state.deletingAlbum = false;
+      })
+      .addCase(deleteAlbum.rejected, (state) => {
+        state.deletingAlbum = false;
+      });
   },
   selectors: {
     selectAlbums: (state) => state.albums,
     selectAlbumsFetching: (state) => state.albumsFetching,
-    selectAlbumCreating: (state) => state.albumCreating
+    selectAlbumCreating: (state) => state.albumCreating,
+    selectAlbumDeleting: (state) => state.deletingAlbum
   }
 });
 
@@ -55,6 +67,7 @@ export const albumsReducer = albumsSlice.reducer;
 export const {
   selectAlbums,
   selectAlbumsFetching,
-  selectAlbumCreating
+  selectAlbumCreating,
+  selectAlbumDeleting
 } = albumsSlice.selectors;
 export const {resetAlbums} = albumsSlice.actions;

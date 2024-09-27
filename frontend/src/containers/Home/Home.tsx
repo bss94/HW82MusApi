@@ -1,12 +1,12 @@
 import ArtistItem from '../../components/Artists/ArtistItem.tsx';
 import Grid from '@mui/material/Grid2';
-import {CircularProgress, Grow, Paper, styled, Typography} from '@mui/material';
-import {Link} from 'react-router-dom';
+import {CircularProgress, Grow, Paper, Typography} from '@mui/material';
 import {useAppDispatch, useAppSelector} from '../../app/hooks.ts';
 import {useEffect} from 'react';
 import {selectArtists, selectArtistsFetching} from '../../store/artistsStore/artistsSlice.ts';
-import {fetchArtists} from '../../store/artistsStore/artistsThunks.ts';
+import {deleteArtist, fetchArtists} from '../../store/artistsStore/artistsThunks.ts';
 import {selectUser} from '../../store/usersStore/usersSlice.ts';
+import {toast} from 'react-toastify';
 
 
 const Home = () => {
@@ -19,9 +19,15 @@ const Home = () => {
     dispatch(fetchArtists());
   }, [dispatch]);
 
-  const StyledLink = styled(Link)({
-    textDecoration: 'none',
-  });
+  const onHandleDelete = async (artistId: string) => {
+    try {
+      await dispatch(deleteArtist(artistId)).unwrap();
+      toast.success('Artist delete successfully');
+      dispatch(fetchArtists());
+    } catch (e) {
+      toast.error('Something wrong' + (e as Error).message);
+    }
+  };
 
   return (
     <Grid container spacing={2}>
@@ -40,16 +46,13 @@ const Home = () => {
                 {...{timeout: index * 500}}
               >
                 <Paper elevation={4}>
-                  <StyledLink to={`/artist/${artist._id}`}>
-                    <ArtistItem name={artist.name} photo={artist.photo} information={artist.information}/>
-                  </StyledLink>
+                  <ArtistItem artist={artist} user={user} deleteArtist={()=>onHandleDelete(artist._id)}/>
                 </Paper>
               </Grow>
             </Grid>
           );
         }
       })}
-
     </Grid>
   );
 };

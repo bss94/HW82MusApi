@@ -37,12 +37,12 @@ const AlbumForm: React.FC<Props> = ({user}) => {
   const submitFormHandler = async (event: React.FormEvent) => {
     event.preventDefault();
     try {
-      if(state.date>1900&&state.date<2030){
+      if (state.date > 1900 && state.date < 2030) {
         await dispatch(createAlbums(state)).unwrap();
         toast.success('Album created');
         navigate('/');
-      }else{
-        toast.error('Date is invalid! date must be bigger then 1900 and lower then 2030')
+      } else {
+        toast.error('Date is invalid! date must be bigger then 1900 and lower then 2030');
       }
 
     } catch (error) {

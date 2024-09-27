@@ -12,6 +12,7 @@ import {useAppSelector} from './app/hooks.ts';
 import {selectUser} from './store/usersStore/usersSlice.ts';
 import ArtistForm from './components/Artists/ArtistForm.tsx';
 import AlbumForm from './components/Albums/AlbumForm.tsx';
+import TrackForm from './components/Tracks/TrackForm.tsx';
 
 
 const App = () => {
@@ -29,11 +30,11 @@ const App = () => {
           </ProtectedRoute>}/>
         <Route path="/new-album" element={
           <ProtectedRoute isAllowed={user !== null}>
-          <AlbumForm user={user}/>
+            <AlbumForm user={user}/>
           </ProtectedRoute>}/>
         <Route path="/new-track" element={
           <ProtectedRoute isAllowed={user && (user.role === 'admin' || user.role === 'user')}>
-
+            <TrackForm user={user}/>
           </ProtectedRoute>}/>
         <Route path="/register" element={<Register/>}/>
         <Route path="/login" element={<Login/>}/>
