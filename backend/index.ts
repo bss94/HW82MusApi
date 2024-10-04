@@ -21,7 +21,6 @@ app.use('/tracks', tracksRouter);
 app.use('/users', usersRouter);
 app.use('/track_history', trackHistoryRouter);
 
-
 const run = async () => {
   await mongoose.connect(config.database);
 
@@ -35,5 +34,3 @@ const run = async () => {
 };
 
 run().catch(console.error);
-
-

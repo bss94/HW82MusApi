@@ -1,14 +1,14 @@
-import React, {useState} from 'react';
-import {useAppDispatch, useAppSelector} from '../../app/hooks.ts';
-import {Link as RouterLink, useNavigate} from 'react-router-dom';
-import {Avatar, Box, Link, TextField, Typography} from '@mui/material';
+import React, { useState } from 'react';
+import { useAppDispatch, useAppSelector } from '../../app/hooks.ts';
+import { Link as RouterLink, useNavigate } from 'react-router-dom';
+import { Avatar, Box, Link, TextField, Typography } from '@mui/material';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Grid from '@mui/material/Grid2';
-import {RegisterMutation} from '../../types.ts';
-import {register} from '../../store/usersStore/usersThunks.ts';
-import {selectRegisterError, selectRegisterLoading} from '../../store/usersStore/usersSlice.ts';
-import {toast} from 'react-toastify';
-import {LoadingButton} from '@mui/lab';
+import { RegisterMutation } from '../../types.ts';
+import { register } from '../../store/usersStore/usersThunks.ts';
+import { selectRegisterError, selectRegisterLoading } from '../../store/usersStore/usersSlice.ts';
+import { toast } from 'react-toastify';
+import { LoadingButton } from '@mui/lab';
 import LoginIcon from '@mui/icons-material/Login';
 import FileInput from '../UI/FileInput/FileInput.tsx';
 
@@ -22,8 +22,8 @@ const Register = () => {
     username: '',
     password: '',
     confirmPassword: '',
-    displayName:'',
-    avatar:null
+    displayName: '',
+    avatar: null,
   });
 
   const getFieldError = (fieldName: string) => {
@@ -31,14 +31,14 @@ const Register = () => {
   };
 
   const inputChangeHandler = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const {name, value} = event.target;
+    const { name, value } = event.target;
     setState((prevState) => ({
       ...prevState,
       [name]: value,
     }));
   };
   const fileInputChangeHandler = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const {name, files} = event.target;
+    const { name, files } = event.target;
     const value = files && files[0] ? files[0] : null;
 
     setState((prevState) => ({
@@ -50,12 +50,12 @@ const Register = () => {
   const submitFormHandler = async (event: React.FormEvent) => {
     event.preventDefault();
     try {
-      const registerMutation:RegisterMutation = {
+      const registerMutation: RegisterMutation = {
         username: state.username.trim().toLowerCase(),
         password: state.password.trim(),
         confirmPassword: state.confirmPassword.trim(),
-        displayName:state.displayName.trim(),
-        avatar:state.avatar
+        displayName: state.displayName.trim(),
+        avatar: state.avatar,
       };
       await dispatch(register(registerMutation)).unwrap();
       navigate('/');
@@ -73,13 +73,13 @@ const Register = () => {
         alignItems: 'center',
       }}
     >
-      <Avatar sx={{m: 1, bgcolor: '#2979ff'}}>
-        <LockOutlinedIcon/>
+      <Avatar sx={{ m: 1, bgcolor: '#2979ff' }}>
+        <LockOutlinedIcon />
       </Avatar>
       <Typography component="h1" variant="h5">
         Sign up
       </Typography>
-      <Box component="form" noValidate onSubmit={submitFormHandler} sx={{mt: 3, width:306}}>
+      <Box component="form" noValidate onSubmit={submitFormHandler} sx={{ mt: 3, width: 306 }}>
         <Grid container direction="column" spacing={2}>
           <Grid size={12}>
             <TextField
@@ -136,22 +136,17 @@ const Register = () => {
             />
           </Grid>
           <Grid size={12}>
-            <FileInput
-              label="Avatar"
-              name="avatar"
-              onChange={fileInputChangeHandler}
-              required={true}
-            />
+            <FileInput label="Avatar" name="avatar" onChange={fileInputChangeHandler} required={true} />
           </Grid>
         </Grid>
         <LoadingButton
           type="submit"
           loading={loading}
           loadingPosition="start"
-          startIcon={<LoginIcon/>}
+          startIcon={<LoginIcon />}
           fullWidth
           variant="contained"
-          sx={{mt: 3, mb: 2}}
+          sx={{ mt: 3, mb: 2 }}
         >
           <span>Sign up</span>
         </LoadingButton>

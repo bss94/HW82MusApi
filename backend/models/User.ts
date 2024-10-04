@@ -7,23 +7,24 @@ const SALT_WORK_FACTOR = 10;
 
 const Schema = mongoose.Schema;
 
-const UserSchema = new Schema<UserFields, UserModel, UserMethods, {}, UserVirtuals>({
+const UserSchema = new Schema<UserFields, UserModel, UserMethods, {}, UserVirtuals>(
+  {
     username: {
       type: String,
       required: true,
       unique: true,
       match: [/^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,5})+$/, 'Please fill a valid email address'],
       validate: {
-        validator: async function(value: string): Promise<boolean> {
+        validator: async function (value: string): Promise<boolean> {
           if (!(this as HydratedDocument<UserFields>).isModified('username')) {
             return true;
           }
 
-          const user = await User.findOne({username: value});
+          const user = await User.findOne({ username: value });
           return !user;
         },
         message: 'This user is already registered!',
-      }
+      },
     },
     password: {
       type: String,
@@ -44,7 +45,7 @@ const UserSchema = new Schema<UserFields, UserModel, UserMethods, {}, UserVirtua
       required: true,
     },
     googleId: String,
-    avatar:String
+    avatar: String,
   },
   {
     virtuals: {
@@ -54,13 +55,13 @@ const UserSchema = new Schema<UserFields, UserModel, UserMethods, {}, UserVirtua
         },
         set(confirmPassword: string) {
           this.__confirmPassword = confirmPassword;
-        }
-      }
-    }
-  }
+        },
+      },
+    },
+  },
 );
 
-UserSchema.path('password').validate(function(v) {
+UserSchema.path('password').validate(function (v) {
   if (!this.isModified('password')) {
     return;
   }
@@ -71,15 +72,15 @@ UserSchema.path('password').validate(function(v) {
   }
 });
 
-UserSchema.methods.checkPassword = function(password) {
+UserSchema.methods.checkPassword = function (password) {
   return bcrypt.compare(password, this.password);
 };
 
-UserSchema.methods.generateToken = function() {
+UserSchema.methods.generateToken = function () {
   this.token = randomUUID();
 };
 
-UserSchema.pre('save', async function(next) {
+UserSchema.pre('save', async function (next) {
   if (!this.isModified('password')) {
     return next();
   }

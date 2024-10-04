@@ -1,4 +1,4 @@
-import mongoose, {Model} from 'mongoose';
+import mongoose, { Model } from 'mongoose';
 
 export interface ArtistMutation {
   name: string;
@@ -36,7 +36,7 @@ export interface UserFields {
   token: string;
   role: string;
   displayName: string;
-  avatar:string;
+  avatar: string;
   googleId?: string;
   __confirmPassword: string;
 }

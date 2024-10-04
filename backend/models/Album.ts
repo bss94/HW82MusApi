@@ -1,4 +1,4 @@
-import mongoose, {Types} from 'mongoose';
+import mongoose, { Types } from 'mongoose';
 import Artist from './Artist';
 import User from './User';
 

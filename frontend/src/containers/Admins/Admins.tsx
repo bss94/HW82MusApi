@@ -1,6 +1,6 @@
 import Grid from '@mui/material/Grid2';
-import {Button, styled, Typography} from '@mui/material';
-import {Link, Outlet, useLocation} from 'react-router-dom';
+import { Button, styled, Typography } from '@mui/material';
+import { Link, Outlet, useLocation } from 'react-router-dom';
 
 export const StyledLink = styled(Link)({
   color: 'inherit',
@@ -11,11 +11,13 @@ export const StyledLink = styled(Link)({
 });
 
 const Admins = () => {
-  const {pathname: location} = useLocation();
+  const { pathname: location } = useLocation();
   return (
     <Grid container spacing={2}>
       <Grid size={12}>
-        <Typography component="h1" variant="h5">Admins Panel</Typography>
+        <Typography component="h1" variant="h5">
+          Admins Panel
+        </Typography>
       </Grid>
       <Grid size={12} display="flex" alignItems="center" justifyContent="space-evenly">
         <StyledLink to={`artists`}>
@@ -34,10 +36,9 @@ const Admins = () => {
             Tracks
           </Button>
         </StyledLink>
-
       </Grid>
 
-      <Outlet/>
+      <Outlet />
     </Grid>
   );
 };

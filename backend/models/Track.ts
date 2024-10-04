@@ -1,4 +1,4 @@
-import mongoose, {Types} from 'mongoose';
+import mongoose, { Types } from 'mongoose';
 import Album from './Album';
 import User from './User';
 
@@ -28,13 +28,13 @@ const TrackSchema = new Schema({
         if (value.includes(':')) {
           const strArr = value.split(':');
           return (
-            strArr.length === 2
-            && strArr[1].length === 2
-            && !isNaN(Number(strArr[0]))
-            && !isNaN(Number(strArr[1]))
-            && parseInt(strArr[0]) >= 0
-            && parseInt(strArr[1]) >= 0
-            && parseInt(strArr[1]) < 60
+            strArr.length === 2 &&
+            strArr[1].length === 2 &&
+            !isNaN(Number(strArr[0])) &&
+            !isNaN(Number(strArr[1])) &&
+            parseInt(strArr[0]) >= 0 &&
+            parseInt(strArr[1]) >= 0 &&
+            parseInt(strArr[1]) < 60
           );
         } else return false;
       },

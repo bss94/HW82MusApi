@@ -8,24 +8,25 @@ import {
   tableCellClasses,
   TableContainer,
   TableHead,
-  TableRow, Typography
+  TableRow,
+  Typography,
 } from '@mui/material';
 import Grid from '@mui/material/Grid2';
-import {useAppDispatch, useAppSelector} from '../../app/hooks.ts';
+import { useAppDispatch, useAppSelector } from '../../app/hooks.ts';
 import {
   selectArtistDeleting,
   selectArtists,
   selectArtistsFetching,
-  selectPublishArtist
+  selectPublishArtist,
 } from '../../store/artistsStore/artistsSlice.ts';
-import {useEffect} from 'react';
-import {deleteArtist, fetchArtists, toggleArtistPublic} from '../../store/artistsStore/artistsThunks.ts';
-import {toast} from 'react-toastify';
+import { useEffect } from 'react';
+import { deleteArtist, fetchArtists, toggleArtistPublic } from '../../store/artistsStore/artistsThunks.ts';
+import { toast } from 'react-toastify';
 import DeleteIcon from '@mui/icons-material/Delete';
 import PublishIcon from '@mui/icons-material/Publish';
-import {LoadingButton} from '@mui/lab';
+import { LoadingButton } from '@mui/lab';
 
-export const StyledTableCell = styled(TableCell)(({theme}) => ({
+export const StyledTableCell = styled(TableCell)(({ theme }) => ({
   [`&.${tableCellClasses.head}`]: {
     backgroundColor: theme.palette.primary.dark,
     color: theme.palette.common.white,
@@ -35,7 +36,7 @@ export const StyledTableCell = styled(TableCell)(({theme}) => ({
   },
 }));
 
-export const StyledTableRow = styled(TableRow)(({theme}) => ({
+export const StyledTableRow = styled(TableRow)(({ theme }) => ({
   '&:nth-of-type(odd)': {
     backgroundColor: theme.palette.action.hover,
   },
@@ -43,7 +44,6 @@ export const StyledTableRow = styled(TableRow)(({theme}) => ({
     border: 0,
   },
 }));
-
 
 const AdminsArtists = () => {
   const dispatch = useAppDispatch();
@@ -78,14 +78,17 @@ const AdminsArtists = () => {
   return (
     <Grid size={12}>
       <Grid size={12}>
-        <Typography component="h1" variant="h6" sx={{my: 2}}>Artists Table</Typography>
+        <Typography component="h1" variant="h6" sx={{ my: 2 }}>
+          Artists Table
+        </Typography>
       </Grid>
-      {fetching ? <Grid size={12} sx={{textAlign: 'center'}}>
-          <CircularProgress/>
+      {fetching ? (
+        <Grid size={12} sx={{ textAlign: 'center' }}>
+          <CircularProgress />
         </Grid>
-        :
+      ) : (
         <TableContainer component={Paper}>
-          <Table sx={{minWidth: '100%'}}>
+          <Table sx={{ minWidth: '100%' }}>
             <TableHead color="primary">
               <TableRow>
                 <StyledTableCell>Name</StyledTableCell>
@@ -104,23 +107,23 @@ const AdminsArtists = () => {
                   </StyledTableCell>
                   <StyledTableCell align="right">{artist.information}</StyledTableCell>
                   <StyledTableCell align="right">{artist.photo}</StyledTableCell>
-                  <StyledTableCell align="right"
-                                   sx={{color: artist.isPublished ? 'inherit' : 'red'}}>{artist.isPublished ? 'Public' : 'Unpublished'}</StyledTableCell>
+                  <StyledTableCell align="right" sx={{ color: artist.isPublished ? 'inherit' : 'red' }}>
+                    {artist.isPublished ? 'Public' : 'Unpublished'}
+                  </StyledTableCell>
                   <StyledTableCell align="right">{artist.publisher}</StyledTableCell>
                   <StyledTableCell align="right">
-                    {!artist.isPublished
-                      &&
+                    {!artist.isPublished && (
                       <LoadingButton
                         loading={publishing === artist._id}
                         loadingPosition="center"
                         variant="outlined"
                         color="success"
                         onClick={() => onArtistPublic(artist._id)}
-                        sx={{me: 1}}
+                        sx={{ me: 1 }}
                       >
-                        <PublishIcon/>
+                        <PublishIcon />
                       </LoadingButton>
-                    }
+                    )}
                     <LoadingButton
                       loading={deleting === artist._id}
                       loadingPosition="center"
@@ -128,16 +131,15 @@ const AdminsArtists = () => {
                       color="error"
                       onClick={() => onArtistDelete(artist._id)}
                     >
-                      <DeleteIcon/>
+                      <DeleteIcon />
                     </LoadingButton>
-
                   </StyledTableCell>
                 </StyledTableRow>
               ))}
             </TableBody>
           </Table>
         </TableContainer>
-      }
+      )}
     </Grid>
   );
 };

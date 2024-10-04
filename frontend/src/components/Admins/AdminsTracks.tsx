@@ -7,22 +7,22 @@ import {
   TableContainer,
   TableHead,
   TableRow,
-  Typography
+  Typography,
 } from '@mui/material';
-import {StyledTableCell, StyledTableRow} from './AdminsArtists.tsx';
-import {LoadingButton} from '@mui/lab';
+import { StyledTableCell, StyledTableRow } from './AdminsArtists.tsx';
+import { LoadingButton } from '@mui/lab';
 import DeleteIcon from '@mui/icons-material/Delete';
 import PublishIcon from '@mui/icons-material/Publish';
-import {useAppDispatch, useAppSelector} from '../../app/hooks.ts';
-import {useEffect} from 'react';
-import {toast} from 'react-toastify';
+import { useAppDispatch, useAppSelector } from '../../app/hooks.ts';
+import { useEffect } from 'react';
+import { toast } from 'react-toastify';
 import {
   selectTrackDeleting,
   selectTrackPublished,
   selectTracks,
-  selectTracksFetching
+  selectTracksFetching,
 } from '../../store/tracksStore/tracksSlice.ts';
-import {deleteTrack, fetchTracks, toggleTrackPublic} from '../../store/tracksStore/tracksThunks.ts';
+import { deleteTrack, fetchTracks, toggleTrackPublic } from '../../store/tracksStore/tracksThunks.ts';
 
 const AdminsTracks = () => {
   const dispatch = useAppDispatch();
@@ -57,14 +57,17 @@ const AdminsTracks = () => {
   return (
     <Grid size={12}>
       <Grid size={12}>
-        <Typography component="h1" variant="h6" sx={{my: 2}}>Track Table</Typography>
+        <Typography component="h1" variant="h6" sx={{ my: 2 }}>
+          Track Table
+        </Typography>
       </Grid>
-      {fetching ? <Grid size={12} sx={{textAlign: 'center'}}>
-          <CircularProgress/>
+      {fetching ? (
+        <Grid size={12} sx={{ textAlign: 'center' }}>
+          <CircularProgress />
         </Grid>
-        :
+      ) : (
         <TableContainer component={Paper}>
-          <Table sx={{minWidth: '100%'}}>
+          <Table sx={{ minWidth: '100%' }}>
             <TableHead color="primary">
               <TableRow>
                 <StyledTableCell>Title</StyledTableCell>
@@ -85,23 +88,23 @@ const AdminsTracks = () => {
                   <StyledTableCell align="right">{track.album}</StyledTableCell>
                   <StyledTableCell align="right">{track.time}</StyledTableCell>
                   <StyledTableCell align="right">{track.trackNumber}</StyledTableCell>
-                  <StyledTableCell align="right"
-                                   sx={{color: track.isPublished ? 'inherit' : 'red'}}>{track.isPublished ? 'Public' : 'Unpublished'}</StyledTableCell>
+                  <StyledTableCell align="right" sx={{ color: track.isPublished ? 'inherit' : 'red' }}>
+                    {track.isPublished ? 'Public' : 'Unpublished'}
+                  </StyledTableCell>
                   <StyledTableCell align="right">{track.publisher}</StyledTableCell>
                   <StyledTableCell align="right">
-                    {!track.isPublished
-                      &&
+                    {!track.isPublished && (
                       <LoadingButton
                         loading={publishing === track._id}
                         loadingPosition="center"
                         variant="outlined"
                         color="success"
                         onClick={() => onTrackPublic(track._id)}
-                        sx={{mx: 1}}
+                        sx={{ mx: 1 }}
                       >
-                        <PublishIcon/>
+                        <PublishIcon />
                       </LoadingButton>
-                    }
+                    )}
                     <LoadingButton
                       loading={deleting === track._id}
                       loadingPosition="center"
@@ -109,7 +112,7 @@ const AdminsTracks = () => {
                       color="error"
                       onClick={() => onTrackDelete(track._id)}
                     >
-                      <DeleteIcon/>
+                      <DeleteIcon />
                     </LoadingButton>
                   </StyledTableCell>
                 </StyledTableRow>
@@ -117,7 +120,7 @@ const AdminsTracks = () => {
             </TableBody>
           </Table>
         </TableContainer>
-      }
+      )}
     </Grid>
   );
 };

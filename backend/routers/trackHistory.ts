@@ -1,7 +1,7 @@
 import express from 'express';
-import {TrackHistoryMutation} from '../types';
+import { TrackHistoryMutation } from '../types';
 import TrackHistory from '../models/TrackHistory';
-import auth, {RequestWithUser} from '../middleware/auth';
+import auth, { RequestWithUser } from '../middleware/auth';
 import mongoose from 'mongoose';
 import Track from '../models/Track';
 import Album from '../models/Album';
@@ -12,19 +12,19 @@ const trackHistoryRouter = express.Router();
 trackHistoryRouter.post('/', auth, async (req: RequestWithUser, res, next) => {
   try {
     if (!req.user) {
-      return res.status(401).send({error: 'User not found'});
+      return res.status(401).send({ error: 'User not found' });
     }
     const track = await Track.findById(req.body.track);
     if (!track) {
-      return res.status(401).send({error: 'Track not found'});
+      return res.status(401).send({ error: 'Track not found' });
     }
     const album = await Album.findById(track.album._id);
     if (!album) {
-      return res.status(401).send({error: 'Album not found'});
+      return res.status(401).send({ error: 'Album not found' });
     }
     const artist = await Artist.findById(album.artist);
     if (!artist) {
-      return res.status(401).send({error: 'Artist not found'});
+      return res.status(401).send({ error: 'Artist not found' });
     }
     const trackHistoryMutation: TrackHistoryMutation = {
       user: req.user._id,
@@ -45,12 +45,12 @@ trackHistoryRouter.post('/', auth, async (req: RequestWithUser, res, next) => {
 trackHistoryRouter.get('/', auth, async (req: RequestWithUser, res, next) => {
   try {
     if (!req.user) {
-      return res.status(401).send({error: 'User not found'});
+      return res.status(401).send({ error: 'User not found' });
     }
-    const trackHistory = await TrackHistory.find({user: req.user._id})
+    const trackHistory = await TrackHistory.find({ user: req.user._id })
       .populate('track', 'title')
       .populate('artist', 'name')
-      .sort({datetime: -1});
+      .sort({ datetime: -1 });
     return res.send(trackHistory);
   } catch (error) {
     return next(error);

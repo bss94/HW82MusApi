@@ -47,8 +47,8 @@ export interface RegisterMutation {
   username: string;
   password: string;
   confirmPassword: string;
-  displayName:string;
-  avatar:File|null;
+  displayName: string;
+  avatar: File | null;
 }
 
 export interface LoginMutation {
@@ -105,7 +105,6 @@ export interface ITrackHistory {
   user: string;
   artist: THArtist;
   datetime: string;
-
 }
 
 export interface ArtistMutation {

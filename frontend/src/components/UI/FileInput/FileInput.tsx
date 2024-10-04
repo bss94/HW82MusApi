@@ -1,5 +1,5 @@
-import React, {useRef, useState} from 'react';
-import {Button, OutlinedInput} from '@mui/material';
+import React, { useRef, useState } from 'react';
+import { Button, OutlinedInput } from '@mui/material';
 import Grid from '@mui/material/Grid2';
 import SearchIcon from '@mui/icons-material/Search';
 
@@ -10,7 +10,7 @@ interface Props {
   required: boolean;
 }
 
-const FileInput: React.FC<Props> = ({onChange, name, label, required}) => {
+const FileInput: React.FC<Props> = ({ onChange, name, label, required }) => {
   const [filename, setFilename] = useState('');
   const inputRef = useRef<HTMLInputElement | null>(null);
 
@@ -31,19 +31,14 @@ const FileInput: React.FC<Props> = ({onChange, name, label, required}) => {
 
   return (
     <>
-      <input type="file" name={name} style={{display: 'none'}} ref={inputRef} onChange={onFileChange}/>
+      <input type="file" name={name} style={{ display: 'none' }} ref={inputRef} onChange={onFileChange} />
       <Grid container spacing={2} alignItems="center">
         <Grid size={9}>
-          <OutlinedInput
-            fullWidth
-            placeholder={label}
-            readOnly
-            value={filename}
-            onClick={activateInput}/>
+          <OutlinedInput fullWidth placeholder={label} readOnly value={filename} onClick={activateInput} />
         </Grid>
         <Grid size={3}>
-          <Button variant="outlined"  onClick={activateInput}>
-            <SearchIcon/>
+          <Button variant="outlined" onClick={activateInput}>
+            <SearchIcon />
           </Button>
         </Grid>
       </Grid>

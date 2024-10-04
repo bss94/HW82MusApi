@@ -6,7 +6,6 @@ import Track from './models/Track';
 import User from './models/User';
 import TrackHistory from './models/TrackHistory';
 
-
 const run = async () => {
   await mongoose.connect(config.database);
   const db = mongoose.connection;
@@ -23,9 +22,9 @@ const run = async () => {
   const admin = new User({
     username: 'admin@admin.local',
     password: 'admin',
-    confirmPassword:'admin',
-    displayName:'Big Boss',
-    role: 'admin'
+    confirmPassword: 'admin',
+    displayName: 'Big Boss',
+    role: 'admin',
   });
   admin.generateToken();
   await admin.save();
@@ -33,57 +32,61 @@ const run = async () => {
   const user = new User({
     username: 'user@user.com',
     password: 'user',
-    confirmPassword:'user',
-    displayName:'JustUser'
+    confirmPassword: 'user',
+    displayName: 'JustUser',
   });
   user.generateToken();
   await user.save();
 
-
-  const [dreArtist, snoopArtist, eminemArtist] = await Artist.create({
+  const [dreArtist, snoopArtist, eminemArtist] = await Artist.create(
+    {
       name: 'dr Dre',
       information: 'west side rap artist',
       photo: 'fixtures/dre.jpg',
       isPublished: true,
-      publisher: admin
-    }, {
+      publisher: admin,
+    },
+    {
       name: 'snoop dogg',
       information: 'west side rap artist',
       photo: 'fixtures/snoop.jpg',
       isPublished: true,
-      publisher: admin
-    }, {
+      publisher: admin,
+    },
+    {
       name: 'eminem',
       information: 'west side rap artist',
       photo: 'fixtures/eminem.jpg',
       isPublished: true,
-      publisher: admin
-    }
+      publisher: admin,
+    },
   );
 
   const unpublishedArtist = await Artist.create({
-      name: 'notorious b.i.g.',
-      information: 'west side rap artist',
-      photo: 'fixtures/notorious.jpg',
-      isPublished: false,
-      publisher: user
-    }
-  );
-  const [firstUnpublishedAlbum, secondUnpublishedAlbum] = await Album.create({
-    title: 'Im BIG',
-    artist: unpublishedArtist,
-    date: 2000,
-    image: null,
+    name: 'notorious b.i.g.',
+    information: 'west side rap artist',
+    photo: 'fixtures/notorious.jpg',
     isPublished: false,
-    publisher: user
-  }, {
-    title: 'Niggaz',
-    artist: unpublishedArtist,
-    date: 2002,
-    image: null,
-    isPublished: false,
-    publisher: user
+    publisher: user,
   });
+  const [firstUnpublishedAlbum, secondUnpublishedAlbum] = await Album.create(
+    {
+      title: 'Im BIG',
+      artist: unpublishedArtist,
+      date: 2000,
+      image: null,
+      isPublished: false,
+      publisher: user,
+    },
+    {
+      title: 'Niggaz',
+      artist: unpublishedArtist,
+      date: 2002,
+      image: null,
+      isPublished: false,
+      publisher: user,
+    },
+  );
   await Track.create(
     {
       title: 'Still DRE',
@@ -91,7 +94,7 @@ const run = async () => {
       time: '4:31',
       trackNumber: 1,
       isPublished: false,
-      publisher: user
+      publisher: user,
     },
     {
       title: 'No guns Allowed',
@@ -99,7 +102,7 @@ const run = async () => {
       time: '3:32',
       trackNumber: 4,
       isPublished: false,
-      publisher: user
+      publisher: user,
     },
     {
       title: 'some track',
@@ -107,31 +110,26 @@ const run = async () => {
       time: '4:11',
       trackNumber: 1,
       isPublished: false,
-      publisher: user
-    }
+      publisher: user,
+    },
   );
 
-  const [
-    firstAlbum,
-    secondAlbum,
-    thirdAlbum,
-    fourthAlbum,
-    fivesAlbum,
-    sixAlbum
-  ] = await Album.create({
+  const [firstAlbum, secondAlbum, thirdAlbum, fourthAlbum, fivesAlbum, sixAlbum] = await Album.create(
+    {
       title: '2001',
       artist: dreArtist,
       date: 1999,
       image: 'fixtures/DrDre-2001.jpg',
       isPublished: true,
-      publisher: admin
-    }, {
+      publisher: admin,
+    },
+    {
       title: 'Reincarnated',
       artist: snoopArtist,
       date: 2017,
       image: 'fixtures/Reincarnated.jpg',
       isPublished: true,
-      publisher: admin
+      publisher: admin,
     },
     {
       title: 'Encore',
@@ -139,7 +137,7 @@ const run = async () => {
       date: 2004,
       image: 'fixtures/Encore_album.jpg',
       isPublished: true,
-      publisher: admin
+      publisher: admin,
     },
     {
       title: 'Dr Dre & Friends',
@@ -147,14 +145,15 @@ const run = async () => {
       date: 2003,
       image: 'fixtures/dreFriends.png',
       isPublished: true,
-      publisher: admin
-    }, {
+      publisher: admin,
+    },
+    {
       title: 'California Times',
       artist: snoopArtist,
       date: 2017,
       image: 'fixtures/California-Times.jpg',
       isPublished: true,
-      publisher: admin
+      publisher: admin,
     },
     {
       title: 'Kamikaze',
@@ -162,10 +161,9 @@ const run = async () => {
       date: 2018,
       image: 'fixtures/Eminem-kamikaze.jpg',
       isPublished: true,
-      publisher: admin
-    }
+      publisher: admin,
+    },
   );
-
 
   const [firstTrack, secondTrack, thirdTrack] = await Track.create(
     {
@@ -174,7 +172,7 @@ const run = async () => {
       time: '4:31',
       trackNumber: 4,
       isPublished: true,
-      publisher: admin
+      publisher: admin,
     },
     {
       title: 'No guns Allowed',
@@ -182,7 +180,7 @@ const run = async () => {
       time: '3:32',
       trackNumber: 6,
       isPublished: true,
-      publisher: admin
+      publisher: admin,
     },
     {
       title: 'Mockingbird',
@@ -190,8 +188,8 @@ const run = async () => {
       time: '4:11',
       trackNumber: 16,
       isPublished: true,
-      publisher: admin
-    }
+      publisher: admin,
+    },
   );
   await Track.create(
     {
@@ -200,7 +198,7 @@ const run = async () => {
       time: '2:42',
       trackNumber: 11,
       isPublished: true,
-      publisher: admin
+      publisher: admin,
     },
     {
       title: 'Bitch Niggaz',
@@ -208,7 +206,7 @@ const run = async () => {
       time: '4:14',
       trackNumber: 13,
       isPublished: true,
-      publisher: admin
+      publisher: admin,
     },
     {
       title: 'Murder inc',
@@ -216,7 +214,7 @@ const run = async () => {
       time: '2:20',
       trackNumber: 15,
       isPublished: true,
-      publisher: admin
+      publisher: admin,
     },
     {
       title: 'Lolo(intro)',
@@ -224,7 +222,7 @@ const run = async () => {
       time: '0:41',
       trackNumber: 1,
       isPublished: true,
-      publisher: admin
+      publisher: admin,
     },
     {
       title: 'Nuthin but a G Thang',
@@ -232,7 +230,7 @@ const run = async () => {
       time: '3:57',
       trackNumber: 3,
       isPublished: true,
-      publisher: admin
+      publisher: admin,
     },
     {
       title: 'Riders Ride',
@@ -240,7 +238,7 @@ const run = async () => {
       time: '4:57',
       trackNumber: 4,
       isPublished: true,
-      publisher: admin
+      publisher: admin,
     },
     {
       title: 'Money',
@@ -248,7 +246,7 @@ const run = async () => {
       time: '4:13',
       trackNumber: 1,
       isPublished: true,
-      publisher: admin
+      publisher: admin,
     },
     {
       title: 'Hellbound',
@@ -256,7 +254,7 @@ const run = async () => {
       time: '3:58',
       trackNumber: 2,
       isPublished: true,
-      publisher: admin
+      publisher: admin,
     },
     {
       title: 'Deep Cover',
@@ -264,7 +262,7 @@ const run = async () => {
       time: '4:10',
       trackNumber: 14,
       isPublished: true,
-      publisher: admin
+      publisher: admin,
     },
     {
       title: 'Lighters Up',
@@ -272,7 +270,7 @@ const run = async () => {
       time: '3:47',
       trackNumber: 3,
       isPublished: true,
-      publisher: admin
+      publisher: admin,
     },
     {
       title: 'La La La',
@@ -280,7 +278,7 @@ const run = async () => {
       time: '3:28',
       trackNumber: 15,
       isPublished: true,
-      publisher: admin
+      publisher: admin,
     },
     {
       title: 'Smoke the Weed',
@@ -288,7 +286,7 @@ const run = async () => {
       time: '3:29',
       trackNumber: 8,
       isPublished: true,
-      publisher: admin
+      publisher: admin,
     },
     {
       title: 'Remedy',
@@ -296,7 +294,7 @@ const run = async () => {
       time: '3:01',
       trackNumber: 14,
       isPublished: true,
-      publisher: admin
+      publisher: admin,
     },
     {
       title: 'Around the World',
@@ -304,7 +302,7 @@ const run = async () => {
       time: '4:10',
       trackNumber: 7,
       isPublished: true,
-      publisher: admin
+      publisher: admin,
     },
     {
       title: 'Cadillacs',
@@ -312,7 +310,7 @@ const run = async () => {
       time: '3:16',
       trackNumber: 6,
       isPublished: true,
-      publisher: admin
+      publisher: admin,
     },
     {
       title: 'Happy Birthday',
@@ -320,7 +318,7 @@ const run = async () => {
       time: '2:48',
       trackNumber: 1,
       isPublished: true,
-      publisher: admin
+      publisher: admin,
     },
     {
       title: 'Never Had It Like This',
@@ -328,7 +326,7 @@ const run = async () => {
       time: '4:16',
       trackNumber: 3,
       isPublished: true,
-      publisher: admin
+      publisher: admin,
     },
     {
       title: 'Phenomenon',
@@ -336,7 +334,7 @@ const run = async () => {
       time: '3:01',
       trackNumber: 2,
       isPublished: true,
-      publisher: admin
+      publisher: admin,
     },
     {
       title: 'Just Lose It',
@@ -344,7 +342,7 @@ const run = async () => {
       time: '4:06',
       trackNumber: 13,
       isPublished: true,
-      publisher: admin
+      publisher: admin,
     },
     {
       title: 'Like Toy Soldiers',
@@ -352,7 +350,7 @@ const run = async () => {
       time: '4:57',
       trackNumber: 5,
       isPublished: true,
-      publisher: admin
+      publisher: admin,
     },
     {
       title: 'Rain man',
@@ -360,7 +358,7 @@ const run = async () => {
       time: '5:14',
       trackNumber: 10,
       isPublished: true,
-      publisher: admin
+      publisher: admin,
     },
     {
       title: 'Ass like That',
@@ -368,7 +366,7 @@ const run = async () => {
       time: '4:26',
       trackNumber: 14,
       isPublished: true,
-      publisher: admin
+      publisher: admin,
     },
     {
       title: 'The Ringer',
@@ -376,7 +374,7 @@ const run = async () => {
       time: '3:01',
       trackNumber: 1,
       isPublished: true,
-      publisher: admin
+      publisher: admin,
     },
     {
       title: 'Greatest',
@@ -384,7 +382,7 @@ const run = async () => {
       time: '4:06',
       trackNumber: 2,
       isPublished: true,
-      publisher: admin
+      publisher: admin,
     },
     {
       title: 'Lucky you',
@@ -392,7 +390,7 @@ const run = async () => {
       time: '4:57',
       trackNumber: 3,
       isPublished: true,
-      publisher: admin
+      publisher: admin,
     },
     {
       title: 'Normal',
@@ -400,7 +398,7 @@ const run = async () => {
       time: '5:14',
       trackNumber: 5,
       isPublished: true,
-      publisher: admin
+      publisher: admin,
     },
     {
       title: 'Venom',
@@ -408,10 +406,9 @@ const run = async () => {
       time: '4:26',
       trackNumber: 13,
       isPublished: true,
-      publisher: admin
+      publisher: admin,
     },
   );
-
 
   const history = new TrackHistory({
     user: user,

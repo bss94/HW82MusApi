@@ -1,6 +1,6 @@
-import {createSlice} from '@reduxjs/toolkit';
-import {Track} from '../../types.ts';
-import {createTracks, deleteTrack, fetchTracks, toggleTrackPublic} from './tracksThunks.ts';
+import { createSlice } from '@reduxjs/toolkit';
+import { Track } from '../../types.ts';
+import { createTracks, deleteTrack, fetchTracks, toggleTrackPublic } from './tracksThunks.ts';
 
 export interface TracksState {
   artist: string | null;
@@ -10,7 +10,6 @@ export interface TracksState {
   creatingTracks: boolean;
   deletingTrack: string | false;
   publishedTrack: string | false;
-
 }
 
 const initialState: TracksState = {
@@ -20,7 +19,7 @@ const initialState: TracksState = {
   fetchingTracks: false,
   creatingTracks: false,
   deletingTrack: false,
-  publishedTrack: false
+  publishedTrack: false,
 };
 
 export const tracksSlice = createSlice({
@@ -31,13 +30,14 @@ export const tracksSlice = createSlice({
       state.tracks = [];
       state.album = null;
       state.artist = null;
-    }
+    },
   },
   extraReducers: (builder) => {
-    builder.addCase(fetchTracks.pending, (state) => {
-      state.fetchingTracks = true;
-    })
-      .addCase(fetchTracks.fulfilled, (state, {payload: albumsTracks}) => {
+    builder
+      .addCase(fetchTracks.pending, (state) => {
+        state.fetchingTracks = true;
+      })
+      .addCase(fetchTracks.fulfilled, (state, { payload: albumsTracks }) => {
         state.tracks = albumsTracks.tracks;
         if (albumsTracks.album) {
           state.album = albumsTracks.album.title;
@@ -48,27 +48,30 @@ export const tracksSlice = createSlice({
       .addCase(fetchTracks.rejected, (state) => {
         state.fetchingTracks = false;
       });
-    builder.addCase(createTracks.pending, (state) => {
-      state.creatingTracks = true;
-    })
+    builder
+      .addCase(createTracks.pending, (state) => {
+        state.creatingTracks = true;
+      })
       .addCase(createTracks.fulfilled, (state) => {
         state.creatingTracks = false;
       })
       .addCase(createTracks.rejected, (state) => {
         state.creatingTracks = false;
       });
-    builder.addCase(deleteTrack.pending, (state, {meta: {arg: id}}) => {
-      state.deletingTrack = id;
-    })
+    builder
+      .addCase(deleteTrack.pending, (state, { meta: { arg: id } }) => {
+        state.deletingTrack = id;
+      })
       .addCase(deleteTrack.fulfilled, (state) => {
         state.deletingTrack = false;
       })
       .addCase(deleteTrack.rejected, (state) => {
         state.deletingTrack = false;
       });
-    builder.addCase(toggleTrackPublic.pending, (state, {meta: {arg: id}}) => {
-      state.publishedTrack = id;
-    })
+    builder
+      .addCase(toggleTrackPublic.pending, (state, { meta: { arg: id } }) => {
+        state.publishedTrack = id;
+      })
       .addCase(toggleTrackPublic.fulfilled, (state) => {
         state.publishedTrack = false;
       })
@@ -84,8 +87,7 @@ export const tracksSlice = createSlice({
     selectTracksCreating: (state) => state.creatingTracks,
     selectTrackDeleting: (state) => state.deletingTrack,
     selectTrackPublished: (state) => state.publishedTrack,
-
-  }
+  },
 });
 
 export const tracksReducer = tracksSlice.reducer;
@@ -96,6 +98,6 @@ export const {
   selectTracksFetching,
   selectTracksCreating,
   selectTrackDeleting,
-  selectTrackPublished
+  selectTrackPublished,
 } = tracksSlice.selectors;
-export const {resetTracks} = tracksSlice.actions;
+export const { resetTracks } = tracksSlice.actions;

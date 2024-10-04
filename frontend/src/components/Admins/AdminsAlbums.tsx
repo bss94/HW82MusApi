@@ -7,23 +7,22 @@ import {
   TableContainer,
   TableHead,
   TableRow,
-  Typography
+  Typography,
 } from '@mui/material';
-import {LoadingButton} from '@mui/lab';
+import { LoadingButton } from '@mui/lab';
 import DeleteIcon from '@mui/icons-material/Delete';
 import PublishIcon from '@mui/icons-material/Publish';
-import {StyledTableCell, StyledTableRow} from './AdminsArtists.tsx';
-import {useAppDispatch, useAppSelector} from '../../app/hooks.ts';
-import {useEffect} from 'react';
-import {toast} from 'react-toastify';
+import { StyledTableCell, StyledTableRow } from './AdminsArtists.tsx';
+import { useAppDispatch, useAppSelector } from '../../app/hooks.ts';
+import { useEffect } from 'react';
+import { toast } from 'react-toastify';
 import {
   selectAlbumDeleting,
   selectAlbumPublishing,
   selectAlbums,
-  selectAlbumsFetching
+  selectAlbumsFetching,
 } from '../../store/albumsStore/albumsSlice.ts';
-import {deleteAlbum, fetchAlbums, toggleAlbumPublic} from '../../store/albumsStore/albumsThunks.ts';
-
+import { deleteAlbum, fetchAlbums, toggleAlbumPublic } from '../../store/albumsStore/albumsThunks.ts';
 
 const AdminsAlbums = () => {
   const dispatch = useAppDispatch();
@@ -58,14 +57,17 @@ const AdminsAlbums = () => {
   return (
     <Grid size={12}>
       <Grid size={12}>
-        <Typography component="h1" variant="h6" sx={{my: 2}}>Albums Table</Typography>
+        <Typography component="h1" variant="h6" sx={{ my: 2 }}>
+          Albums Table
+        </Typography>
       </Grid>
-      {fetching ? <Grid size={12} sx={{textAlign: 'center'}}>
-          <CircularProgress/>
+      {fetching ? (
+        <Grid size={12} sx={{ textAlign: 'center' }}>
+          <CircularProgress />
         </Grid>
-        :
+      ) : (
         <TableContainer component={Paper}>
-          <Table sx={{minWidth: '100%'}}>
+          <Table sx={{ minWidth: '100%' }}>
             <TableHead color="primary">
               <TableRow>
                 <StyledTableCell>Title</StyledTableCell>
@@ -86,23 +88,23 @@ const AdminsAlbums = () => {
                   <StyledTableCell align="right">{album.artist}</StyledTableCell>
                   <StyledTableCell align="right">{album.date}</StyledTableCell>
                   <StyledTableCell align="right">{album.image}</StyledTableCell>
-                  <StyledTableCell align="right"
-                                   sx={{color: album.isPublished ? 'inherit' : 'red'}}>{album.isPublished ? 'Public' : 'Unpublished'}</StyledTableCell>
+                  <StyledTableCell align="right" sx={{ color: album.isPublished ? 'inherit' : 'red' }}>
+                    {album.isPublished ? 'Public' : 'Unpublished'}
+                  </StyledTableCell>
                   <StyledTableCell align="right">{album.publisher}</StyledTableCell>
                   <StyledTableCell align="right">
-                    {!album.isPublished
-                      &&
+                    {!album.isPublished && (
                       <LoadingButton
                         loading={publishing === album._id}
                         loadingPosition="center"
                         variant="outlined"
                         color="success"
                         onClick={() => onAlbumPublic(album._id)}
-                        sx={{mx:1}}
+                        sx={{ mx: 1 }}
                       >
-                        <PublishIcon/>
+                        <PublishIcon />
                       </LoadingButton>
-                    }
+                    )}
                     <LoadingButton
                       loading={deleting === album._id}
                       loadingPosition="center"
@@ -110,7 +112,7 @@ const AdminsAlbums = () => {
                       color="error"
                       onClick={() => onAlbumDelete(album._id)}
                     >
-                      <DeleteIcon/>
+                      <DeleteIcon />
                     </LoadingButton>
                   </StyledTableCell>
                 </StyledTableRow>
@@ -118,7 +120,7 @@ const AdminsAlbums = () => {
             </TableBody>
           </Table>
         </TableContainer>
-      }
+      )}
     </Grid>
   );
 };

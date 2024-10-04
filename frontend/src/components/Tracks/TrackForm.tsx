@@ -1,23 +1,23 @@
-import React, {useEffect, useState} from 'react';
-import {TrackMutation, User} from '../../types.ts';
-import {useAppDispatch, useAppSelector} from '../../app/hooks.ts';
-import {selectArtists, selectArtistsFetching} from '../../store/artistsStore/artistsSlice.ts';
-import {selectAlbums, selectAlbumsFetching} from '../../store/albumsStore/albumsSlice.ts';
-import {useNavigate} from 'react-router-dom';
-import {fetchArtists} from '../../store/artistsStore/artistsThunks.ts';
-import {selectTracksCreating} from '../../store/tracksStore/tracksSlice.ts';
+import React, { useEffect, useState } from 'react';
+import { TrackMutation, User } from '../../types.ts';
+import { useAppDispatch, useAppSelector } from '../../app/hooks.ts';
+import { selectArtists, selectArtistsFetching } from '../../store/artistsStore/artistsSlice.ts';
+import { selectAlbums, selectAlbumsFetching } from '../../store/albumsStore/albumsSlice.ts';
+import { useNavigate } from 'react-router-dom';
+import { fetchArtists } from '../../store/artistsStore/artistsThunks.ts';
+import { selectTracksCreating } from '../../store/tracksStore/tracksSlice.ts';
 import Grid from '@mui/material/Grid2';
-import {CircularProgress, MenuItem, TextField, Typography} from '@mui/material';
-import {LoadingButton} from '@mui/lab';
-import {fetchAlbums} from '../../store/albumsStore/albumsThunks.ts';
-import {toast} from 'react-toastify';
-import {createTracks} from '../../store/tracksStore/tracksThunks.ts';
+import { CircularProgress, MenuItem, TextField, Typography } from '@mui/material';
+import { LoadingButton } from '@mui/lab';
+import { fetchAlbums } from '../../store/albumsStore/albumsThunks.ts';
+import { toast } from 'react-toastify';
+import { createTracks } from '../../store/tracksStore/tracksThunks.ts';
 
 interface Props {
   user: User | null;
 }
 
-const TrackForm: React.FC<Props> = ({user}) => {
+const TrackForm: React.FC<Props> = ({ user }) => {
   const dispatch = useAppDispatch();
   const artists = useAppSelector(selectArtists);
   const albums = useAppSelector(selectAlbums);
@@ -33,11 +33,11 @@ const TrackForm: React.FC<Props> = ({user}) => {
     title: '',
     album: '',
     trackNumber: 0,
-    time: ''
+    time: '',
   });
   const [currentArtist, setCurrentArtist] = useState<string>('');
   useEffect(() => {
-    if (currentArtist !== ''){
+    if (currentArtist !== '') {
       dispatch(fetchAlbums(currentArtist));
     }
   }, [dispatch, currentArtist]);
@@ -45,10 +45,12 @@ const TrackForm: React.FC<Props> = ({user}) => {
   const submitFormHandler = async (event: React.FormEvent) => {
     event.preventDefault();
     try {
-      await dispatch(createTracks({
-        ...state,
-        title: state.title.trim()
-      })).unwrap();
+      await dispatch(
+        createTracks({
+          ...state,
+          title: state.title.trim(),
+        }),
+      ).unwrap();
       toast.success('Track created');
       navigate('/');
     } catch (error) {
@@ -57,7 +59,7 @@ const TrackForm: React.FC<Props> = ({user}) => {
   };
 
   const inputChangeHandler = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const {name, value} = event.target;
+    const { name, value } = event.target;
     setState((prevState) => ({
       ...prevState,
       [name]: value,
@@ -71,17 +73,18 @@ const TrackForm: React.FC<Props> = ({user}) => {
     }));
   };
 
-
   return (
     <Grid container direction="column" spacing={2} component="form" onSubmit={submitFormHandler}>
       <Grid size={12}>
-        <Typography component="h1" variant="h5">Create new track</Typography>
+        <Typography component="h1" variant="h5">
+          Create new track
+        </Typography>
       </Grid>
-      {fetchingArtist ?
-        <Grid size={12} sx={{textAlign: 'center'}}>
-          <CircularProgress/>
+      {fetchingArtist ? (
+        <Grid size={12} sx={{ textAlign: 'center' }}>
+          <CircularProgress />
         </Grid>
-        :
+      ) : (
         <>
           <Grid size={12}>
             <TextField
@@ -91,8 +94,8 @@ const TrackForm: React.FC<Props> = ({user}) => {
               id="title"
               name="title"
               value={state.title}
-              onChange={inputChangeHandler}/>
-
+              onChange={inputChangeHandler}
+            />
           </Grid>
           <Grid size={12}>
             <TextField
@@ -103,7 +106,8 @@ const TrackForm: React.FC<Props> = ({user}) => {
               id="trackNumber"
               name="trackNumber"
               value={state.trackNumber}
-              onChange={inputChangeHandler}/>
+              onChange={inputChangeHandler}
+            />
           </Grid>
           <Grid size={12}>
             <TextField
@@ -116,26 +120,28 @@ const TrackForm: React.FC<Props> = ({user}) => {
               value={currentArtist}
               onChange={ArtistChangeHandler}
             >
-              <MenuItem value="">
-                Select artist
-              </MenuItem>
+              <MenuItem value="">Select artist</MenuItem>
               {artists.map((artist) => {
                 if (artist.isPublished || artist.publisher === user?._id || user?.role === 'admin') {
-                  return <MenuItem value={artist._id} key={artist._id}
-                                   sx={{color: !artist.isPublished ? 'orangered' : 'inherit'}}>
-                    {artist.name} {!artist.isPublished && '(Unpublished)'}
-                  </MenuItem>;
+                  return (
+                    <MenuItem
+                      value={artist._id}
+                      key={artist._id}
+                      sx={{ color: !artist.isPublished ? 'orangered' : 'inherit' }}
+                    >
+                      {artist.name} {!artist.isPublished && '(Unpublished)'}
+                    </MenuItem>
+                  );
                 }
               })}
             </TextField>
           </Grid>
 
-          {fetchingAlbums
-            ?
-            <Grid size={12} sx={{textAlign: 'center'}}>
-              <CircularProgress/>
+          {fetchingAlbums ? (
+            <Grid size={12} sx={{ textAlign: 'center' }}>
+              <CircularProgress />
             </Grid>
-            :
+          ) : (
             <Grid size={12}>
               <TextField
                 required
@@ -148,20 +154,23 @@ const TrackForm: React.FC<Props> = ({user}) => {
                 value={state.album}
                 onChange={inputChangeHandler}
               >
-                <MenuItem value="">
-                  Select artist
-                </MenuItem>
+                <MenuItem value="">Select artist</MenuItem>
                 {albums.map((album) => {
                   if (album.isPublished || album.publisher === user?._id || user?.role === 'admin') {
-                    return <MenuItem value={album._id} key={album._id}
-                                     sx={{color: !album.isPublished ? 'orangered' : 'inherit'}}>
-                      {album.title} {!album.isPublished && '(Unpublished)'}
-                    </MenuItem>;
+                    return (
+                      <MenuItem
+                        value={album._id}
+                        key={album._id}
+                        sx={{ color: !album.isPublished ? 'orangered' : 'inherit' }}
+                      >
+                        {album.title} {!album.isPublished && '(Unpublished)'}
+                      </MenuItem>
+                    );
                   }
                 })}
               </TextField>
             </Grid>
-          }
+          )}
           <Grid size={12}>
             <TextField
               required
@@ -171,20 +180,16 @@ const TrackForm: React.FC<Props> = ({user}) => {
               id="time"
               name="time"
               value={state.time}
-              onChange={inputChangeHandler}/>
+              onChange={inputChangeHandler}
+            />
           </Grid>
           <Grid>
-            <LoadingButton
-              type="submit"
-              loading={sending}
-              loadingPosition="center"
-              variant="contained"
-            >
+            <LoadingButton type="submit" loading={sending} loadingPosition="center" variant="contained">
               <span>Send</span>
             </LoadingButton>
           </Grid>
         </>
-      }
+      )}
     </Grid>
   );
 };
