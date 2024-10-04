@@ -5,12 +5,13 @@ import { Avatar, Box, Link, TextField, Typography } from '@mui/material';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Grid from '@mui/material/Grid2';
 import { RegisterMutation } from '../../types.ts';
-import { register } from '../../store/usersStore/usersThunks.ts';
+import { googleLogin, register } from '../../store/usersStore/usersThunks.ts';
 import { selectRegisterError, selectRegisterLoading } from '../../store/usersStore/usersSlice.ts';
 import { toast } from 'react-toastify';
 import { LoadingButton } from '@mui/lab';
 import LoginIcon from '@mui/icons-material/Login';
 import FileInput from '../UI/FileInput/FileInput.tsx';
+import { CredentialResponse, GoogleLogin } from '@react-oauth/google';
 
 const Register = () => {
   const dispatch = useAppDispatch();
@@ -61,6 +62,12 @@ const Register = () => {
       navigate('/');
     } catch (e) {
       toast.error((e as Error).message);
+    }
+  };
+  const googleLoginHandler = async (credentialResponse: CredentialResponse) => {
+    if (credentialResponse.credential) {
+      await dispatch(googleLogin(credentialResponse.credential)).unwrap();
+      navigate('/');
     }
   };
 
@@ -153,6 +160,17 @@ const Register = () => {
         <Link component={RouterLink} to="/login" variant="body2">
           Already have an account? Sign in
         </Link>
+      </Box>
+      <Box sx={{ pt: 2 }}>
+        <Typography component="h6" variant="h6" sx={{ my: 1, textAlign: 'center' }}>
+          or:
+        </Typography>
+        <GoogleLogin
+          onSuccess={googleLoginHandler}
+          onError={() => {
+            console.log('Login Failed');
+          }}
+        />
       </Box>
     </Box>
   );
