@@ -37,7 +37,6 @@ const Home = () => {
       {fetching && <Grid size={12} sx={{textAlign: 'center'}}> <CircularProgress/> </Grid>}
 
       {artists.length > 0 ? artists.map((artist, index) => {
-        if (artist.isPublished || artist.publisher === user?._id || user?.role === 'admin') {
           return (
             <Grid size={3} key={artist._id}>
               <Grow
@@ -51,7 +50,6 @@ const Home = () => {
               </Grow>
             </Grid>
           );
-        }
       })
       :!fetching && <Alert severity="info"> Artist not found</Alert>
       }

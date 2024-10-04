@@ -3,10 +3,11 @@ import {AlbumsTracks, TrackMutation} from '../../types.ts';
 import axiosApi from '../../axiosApi.ts';
 import {RootState} from '../../app/store.ts';
 
-export const fetchTracks = createAsyncThunk<AlbumsTracks, string | undefined>(
+export const fetchTracks = createAsyncThunk<AlbumsTracks, string | undefined, { state: RootState }>(
   'tracks/fetchTracks',
-  async (albumId) => {
-    const {data: albumsTracks} = await axiosApi.get(`/tracks${albumId ? `?album=${albumId}` : ''}`);
+  async (albumId, {getState}) => {
+    const token = getState().users.user?.token;
+    const {data: albumsTracks} = await axiosApi.get(`/tracks${albumId ? `?album=${albumId}` : ''}`,{headers: {'Authorization': `Bearer ${token}`}});
     return albumsTracks;
   }
 );

@@ -4,10 +4,11 @@ import axiosApi from '../../axiosApi.ts';
 import {RootState} from '../../app/store.ts';
 
 
-export const fetchArtists = createAsyncThunk<Artist[]>(
+export const fetchArtists = createAsyncThunk<Artist[],void,{ state: RootState }>(
   'artists/fetchArtists',
-  async () => {
-    const {data: artists} = await axiosApi.get<Artist[]>('/artists');
+  async (_arg,{getState}) => {
+    const token = getState().users.user?.token;
+    const {data: artists} = await axiosApi.get<Artist[]>('/artists',{headers: {'Authorization': `Bearer ${token}`}});
     return artists;
   }
 );

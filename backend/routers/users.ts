@@ -66,7 +66,7 @@ usersRouter.post('/google', async (req, res, next) => {
     if (!email) {
       return res.status(400).send({error: 'Not enough user data to continue!'});
     }
-    let user = await User.findOne({googleID: id});
+    let user = await User.findOne({googleId: id});
     if (!user) {
       const newPassword = crypto.randomUUID();
       user = new User({

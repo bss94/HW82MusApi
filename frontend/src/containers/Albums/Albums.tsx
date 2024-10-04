@@ -53,7 +53,6 @@ const Albums = () => {
         {
           albums.length > 0 ?
             albums.map((album, index) => {
-              if (album.isPublished || album.publisher === user?._id || user?.role === 'admin') {
                 return (
                   <Grid size={3} key={album._id}>
                     <Grow
@@ -67,7 +66,6 @@ const Albums = () => {
                     </Grow>
                   </Grid>
                 );
-              }
             })
             :
             !fetching && <Alert severity="info"> Albums not found</Alert>

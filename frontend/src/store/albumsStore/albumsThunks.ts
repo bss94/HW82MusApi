@@ -3,10 +3,11 @@ import axiosApi from '../../axiosApi.ts';
 import {Album, AlbumMutation} from '../../types.ts';
 import {RootState} from '../../app/store.ts';
 
-export const fetchAlbums = createAsyncThunk<Album[], string | undefined>(
+export const fetchAlbums = createAsyncThunk<Album[], string | undefined, { state: RootState }>(
   'albums/fetchAlbums',
-  async (artistId) => {
-    const {data: albums} = await axiosApi.get<Album[]>(`/albums${artistId ? `?artist=${artistId}` : ''}`);
+  async (artistId, {getState}) => {
+    const token = getState().users.user?.token;
+    const {data: albums} = await axiosApi.get<Album[]>(`/albums${artistId ? `?artist=${artistId}` : ''}`,{headers: {'Authorization': `Bearer ${token}`}});
     return albums;
   }
 );

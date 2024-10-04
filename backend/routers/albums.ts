@@ -5,14 +5,32 @@ import {imagesUpload} from '../multer';
 import {AlbumMutation} from '../types';
 import auth, {RequestWithUser} from '../middleware/auth';
 import {clearTracksAndChildren} from '../constants';
+import maybeAuth from '../middleware/maybeAuth';
 
 const albumsRouter = express.Router();
 
-albumsRouter.get('/', async (req, res, next) => {
+albumsRouter.get('/', maybeAuth,async (req:RequestWithUser, res, next) => {
   try {
     const artistId = req.query.artist;
-    const albums = await Album.find(artistId ? {artist: artistId} : {}).sort({date: -1});
-    return res.send(albums);
+    if(artistId) {
+      const publishedAlbums = await Album.find( {artist: artistId,isPublished: true}).sort({date: -1});
+      if(req.user) {
+        if(req.user.role === 'admin') {
+          const allAlbums = await Album.find( {artist: artistId}).sort({date: -1});
+          return res.send(allAlbums)
+        }else {
+        const usersAlbums = await Album.find({artist: artistId,isPublished: false,publisher: req.user._id});
+        return res.send([...publishedAlbums,...usersAlbums]);
+        }
+      }
+      return res.send(publishedAlbums);
+    }else {
+      if(req.user && req.user.role === 'admin') {
+        const allAlbums = await Album.find().sort({date: -1});
+        return res.send(allAlbums)
+      }
+        return res.status(401).send({error: 'Unauthorized'});
+    }
   } catch (error) {
     return next(error);
   }
@@ -60,7 +78,7 @@ albumsRouter.delete('/:id', auth, async (req: RequestWithUser, res, next) => {
     }
     const album = await Album.findById(req.params.id);
     if (album) {
-      if (req.user.role === 'admin' || (album.publisher === req.user._id && !album.isPublished)) {
+      if (req.user.role === 'admin' || (album.publisher.toString() === req.user._id.toString() && !album.isPublished)) {
         await clearTracksAndChildren(album._id);
         await album.deleteOne();
         return res.send({deleted: true});

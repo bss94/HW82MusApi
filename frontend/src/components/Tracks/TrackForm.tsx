@@ -37,7 +37,9 @@ const TrackForm: React.FC<Props> = ({user}) => {
   });
   const [currentArtist, setCurrentArtist] = useState<string>('');
   useEffect(() => {
-    dispatch(fetchAlbums(currentArtist));
+    if (currentArtist !== ''){
+      dispatch(fetchAlbums(currentArtist));
+    }
   }, [dispatch, currentArtist]);
 
   const submitFormHandler = async (event: React.FormEvent) => {

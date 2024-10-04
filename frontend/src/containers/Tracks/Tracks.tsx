@@ -66,9 +66,8 @@ const Tracks = () => {
         <Typography component="h1" variant="h5">Album and Artist not found</Typography>
       </Grid>
       }
-      {tracks.filter(track => track.isPublished || track.publisher === user?._id || ((user?.role === 'admin') && track)).length > 0 ?
+      {tracks.length > 0 ?
         tracks.map((track, index) => {
-          if (track.isPublished || track.publisher === user?._id || user?.role === 'admin') {
             return (
               <Grid size={12} key={track._id}>
                 <Grow
@@ -89,7 +88,6 @@ const Tracks = () => {
                 </Grow>
               </Grid>
             );
-          }
         })
         : !fetching && <Grid size={12}>
         <Alert severity="info">Have not published track yet</Alert>

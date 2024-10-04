@@ -4,9 +4,10 @@ import {User} from '../../../types.ts';
 import Grid from '@mui/material/Grid2';
 
 import {useAppDispatch} from '../../../app/hooks.ts';
-import {Link} from 'react-router-dom';
+import {Link, useNavigate} from 'react-router-dom';
 import {logout} from '../../../store/usersStore/usersThunks.ts';
 import {API_URL} from '../../../constants.ts';
+import {fetchArtists} from '../../../store/artistsStore/artistsThunks.ts';
 
 const StyledLink = styled(Link)({
   color: 'inherit',
@@ -23,6 +24,7 @@ interface Props {
 const UserMenu: React.FC<Props> = ({user}) => {
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const isOpen = Boolean(anchorEl);
+  const navigate = useNavigate();
   const dispatch = useAppDispatch();
   const handleClick = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorEl(event.currentTarget);
@@ -30,6 +32,11 @@ const UserMenu: React.FC<Props> = ({user}) => {
   const handleClose = () => {
     setAnchorEl(null);
   };
+  const userLogout = async ()=>{
+    await dispatch(logout());
+    dispatch(fetchArtists())
+    navigate('/')
+  }
 
   return (
     <Grid>
@@ -41,9 +48,7 @@ const UserMenu: React.FC<Props> = ({user}) => {
         /> Hello, {user.displayName}!
       </Button>
       <Menu open={isOpen} anchorEl={anchorEl} keepMounted onClose={handleClose}>
-        <MenuItem onClick={() => {
-          dispatch(logout());
-        }}>Logout</MenuItem>
+        <MenuItem onClick={userLogout}>Logout</MenuItem>
         {
           user.role === 'admin' &&
           <MenuItem>

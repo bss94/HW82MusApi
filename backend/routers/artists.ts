@@ -5,13 +5,23 @@ import {imagesUpload} from '../multer';
 import {ArtistMutation} from '../types';
 import auth, {RequestWithUser} from '../middleware/auth';
 import {clearAlbumsAndChildren} from '../constants';
+import maybeAuth from '../middleware/maybeAuth';
 
 const artistsRouter = express.Router();
 
-artistsRouter.get('/', async (req, res, next) => {
+artistsRouter.get('/',maybeAuth, async (req:RequestWithUser, res, next) => {
   try {
-    const artists = await Artist.find();
-    return res.send(artists);
+    const publishedArtists = await Artist.find({isPublished: true});
+    if(req.user) {
+      if (req.user.role === 'admin') {
+       const allArtists = await Artist.find();
+        return res.send(allArtists);
+      }else {
+        const usersArtists = await Artist.find({isPublished: false,publisher: req.user._id});
+        return res.send([...publishedArtists,...usersArtists]);
+      }
+    }
+    return res.send(publishedArtists);
   } catch (error) {
     return next(error);
   }
@@ -45,7 +55,7 @@ artistsRouter.delete('/:id', auth, async (req: RequestWithUser, res, next) => {
     }
     const artist = await Artist.findById(req.params.id);
     if (artist) {
-      if (req.user.role === 'admin' || (req.user._id === artist.publisher && !artist.isPublished)) {
+      if (req.user.role === 'admin' || (req.user._id.toString() === artist.publisher.toString() && !artist.isPublished)) {
         await clearAlbumsAndChildren(artist._id);
         await artist.deleteOne();
         return res.send({deleted: true});

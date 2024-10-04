@@ -43,7 +43,7 @@ const UserSchema = new Schema<UserFields, UserModel, UserMethods, {}, UserVirtua
       type: String,
       required: true,
     },
-    googleID: String,
+    googleId: String,
     avatar:String
   },
   {

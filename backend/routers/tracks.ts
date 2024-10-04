@@ -4,19 +4,31 @@ import {TrackMutation} from '../types';
 import Album from '../models/Album';
 import auth, {RequestWithUser} from '../middleware/auth';
 import {clearTrackHistories} from '../constants';
+import maybeAuth from '../middleware/maybeAuth';
 
 const tracksRouter = express.Router();
 
-tracksRouter.get('/', async (req, res, next) => {
+tracksRouter.get('/',maybeAuth, async (req:RequestWithUser, res, next) => {
   try {
     const albumId = req.query.album;
-    if (albumId !== undefined) {
+    if (albumId) {
       const album = await Album.findById(albumId).populate('artist', 'name');
-      const tracks = await Track.find({album: albumId}).sort({trackNumber: 1});
-      return res.send({album: album, tracks: tracks});
+      const publishedTracks = await Track.find({album: albumId,isPublished: true}).sort({trackNumber: 1});
+      if (req.user){
+        if (req.user.role === 'admin') {
+         const allAlbumsTracks = await Track.find({album: albumId}).sort({trackNumber: 1});
+          return res.send({album: album, tracks: allAlbumsTracks});
+        }else {
+          const usersTracks = await Track.find({album: albumId,isPublished: false,publisher: req.user._id}).sort({trackNumber: 1});
+          return res.send({album: album, tracks: [...publishedTracks,...usersTracks]});
+        }
+      }
+      return res.send({album: album, tracks: publishedTracks});
+    }else if(req.user && req.user.role === 'admin') {
+      const tracks = await Track.find();
+      return res.send({album: null, tracks: tracks});
     }
-    const tracks = await Track.find();
-    return res.send({album: null, tracks: tracks});
+    return res.status(401).send({error: 'Unauthorized'});
   } catch (error) {
     return next(error);
   }
@@ -49,7 +61,7 @@ tracksRouter.delete('/:id', auth, async (req: RequestWithUser, res, next) => {
     }
     const track = await Track.findById(req.params.id);
     if (track) {
-      if (req.user.role === 'admin' || (req.user._id === track.publisher && !track.isPublished)) {
+      if (req.user.role === 'admin' || (req.user._id.toString() === track.publisher.toString() && !track.isPublished)) {
         await clearTrackHistories(track._id);
         await track.deleteOne();
         return res.send({deleted: true});

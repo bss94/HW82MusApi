@@ -116,7 +116,7 @@ const AdminsArtists = () => {
                         variant="outlined"
                         color="success"
                         onClick={() => onArtistPublic(artist._id)}
-                        sx={{mx: 1}}
+                        sx={{me: 1}}
                       >
                         <PublishIcon/>
                       </LoadingButton>

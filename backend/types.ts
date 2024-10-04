@@ -37,7 +37,7 @@ export interface UserFields {
   role: string;
   displayName: string;
   avatar:string;
-  googleID?: string;
+  googleId?: string;
   __confirmPassword: string;
 }
 
