@@ -21,16 +21,20 @@ const run = async () => {
   }
 
   const admin = new User({
-    username: 'admin',
+    username: 'admin@admin.local',
     password: 'admin',
+    confirmPassword:'admin',
+    displayName:'Big Boss',
     role: 'admin'
   });
   admin.generateToken();
   await admin.save();
 
   const user = new User({
-    username: 'user',
+    username: 'user@user.com',
     password: 'user',
+    confirmPassword:'user',
+    displayName:'JustUser'
   });
   user.generateToken();
   await user.save();

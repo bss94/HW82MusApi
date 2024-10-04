@@ -9,6 +9,7 @@ import LockOpenIcon from '@mui/icons-material/LockOpen';
 import Grid from '@mui/material/Grid2';
 import LoginIcon from '@mui/icons-material/Login';
 import {LoadingButton} from '@mui/lab';
+import {GoogleLogin} from '@react-oauth/google';
 
 const Login = () => {
   const dispatch = useAppDispatch();
@@ -50,6 +51,16 @@ const Login = () => {
       <Typography component="h1" variant="h5">
         Sign in
       </Typography>
+      <Box sx={{pt:2}}>
+        <GoogleLogin
+          onSuccess={(credentialResponse)=>{
+          console.log(credentialResponse);
+        }}
+        onError={()=>{
+          console.log('Login Failed');
+        }}
+        />
+      </Box>
       <Box component="form" onSubmit={submitFormHandler} sx={{mt: 3, width: 306}}>
         <Grid container direction="column" spacing={2}>
           <Grid size={12}>

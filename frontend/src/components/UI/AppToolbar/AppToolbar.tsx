@@ -21,7 +21,7 @@ const AppToolbar = () => {
     <AppBar position="sticky" sx={{mb: 2}}>
       <Toolbar>
         <Typography variant="h6" component="div" sx={{flexGrow: 1}}>
-          <StyledLink to="/">MyMusic</StyledLink>
+          <StyledLink to="/">MyMusicApp</StyledLink>
         </Typography>
         <Grid container spacing={2}>
           {user ? <UserMenu user={user}/> : <AnonymousMenu/>}
