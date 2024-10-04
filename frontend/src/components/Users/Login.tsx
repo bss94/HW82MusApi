@@ -2,14 +2,14 @@ import React, {useState} from 'react';
 import {useAppDispatch, useAppSelector} from '../../app/hooks.ts';
 import {Link as RouterLink, useNavigate} from 'react-router-dom';
 import {selectLoginError, selectLoginLoading} from '../../store/usersStore/usersSlice.ts';
-import {RegisterMutation} from '../../types.ts';
-import {login} from '../../store/usersStore/usersThunks.ts';
+import {LoginMutation} from '../../types.ts';
+import {googleLogin, login} from '../../store/usersStore/usersThunks.ts';
 import {Alert, Avatar, Box, Link, TextField, Typography} from '@mui/material';
 import LockOpenIcon from '@mui/icons-material/LockOpen';
 import Grid from '@mui/material/Grid2';
 import LoginIcon from '@mui/icons-material/Login';
 import {LoadingButton} from '@mui/lab';
-import {GoogleLogin} from '@react-oauth/google';
+import {CredentialResponse, GoogleLogin} from '@react-oauth/google';
 
 const Login = () => {
   const dispatch = useAppDispatch();
@@ -17,7 +17,7 @@ const Login = () => {
   const error = useAppSelector(selectLoginError);
   const loading = useAppSelector(selectLoginLoading);
 
-  const [state, setState] = useState<RegisterMutation>({
+  const [state, setState] = useState<LoginMutation>({
     username: '',
     password: '',
   });
@@ -36,6 +36,13 @@ const Login = () => {
     navigate('/');
   };
 
+  const googleLoginHandler = async (credentialResponse: CredentialResponse) => {
+    if (credentialResponse.credential) {
+      await dispatch(googleLogin(credentialResponse.credential)).unwrap();
+      navigate('/');
+    }
+  };
+
   return (
     <Box
       sx={{
@@ -51,14 +58,12 @@ const Login = () => {
       <Typography component="h1" variant="h5">
         Sign in
       </Typography>
-      <Box sx={{pt:2}}>
+      <Box sx={{pt: 2}}>
         <GoogleLogin
-          onSuccess={(credentialResponse)=>{
-          console.log(credentialResponse);
-        }}
-        onError={()=>{
-          console.log('Login Failed');
-        }}
+          onSuccess={googleLoginHandler}
+          onError={() => {
+            console.log('Login Failed');
+          }}
         />
       </Box>
       <Box component="form" onSubmit={submitFormHandler} sx={{mt: 3, width: 306}}>

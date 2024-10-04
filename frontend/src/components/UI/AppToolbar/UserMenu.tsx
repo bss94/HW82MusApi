@@ -1,11 +1,12 @@
 import React, {useState} from 'react';
-import {Button, Menu, MenuItem, styled} from '@mui/material';
+import {Avatar, Button, Menu, MenuItem, styled} from '@mui/material';
 import {User} from '../../../types.ts';
 import Grid from '@mui/material/Grid2';
 
 import {useAppDispatch} from '../../../app/hooks.ts';
 import {Link} from 'react-router-dom';
 import {logout} from '../../../store/usersStore/usersThunks.ts';
+import {API_URL} from '../../../constants.ts';
 
 const StyledLink = styled(Link)({
   color: 'inherit',
@@ -32,7 +33,13 @@ const UserMenu: React.FC<Props> = ({user}) => {
 
   return (
     <Grid>
-      <Button onClick={handleClick} color={'inherit'}>Hello, {user.username}!</Button>
+      <Button onClick={handleClick} color={'inherit'}>
+        <Avatar
+          alt={user.displayName}
+          src={user.avatar ? `${API_URL}/${user.avatar}` : user.displayName}
+          sx={{ width: 46, height: 46, mx:1 }}
+        /> Hello, {user.displayName}!
+      </Button>
       <Menu open={isOpen} anchorEl={anchorEl} keepMounted onClose={handleClose}>
         <MenuItem onClick={() => {
           dispatch(logout());

@@ -1,6 +1,7 @@
 import React, {useRef, useState} from 'react';
 import {Button, OutlinedInput} from '@mui/material';
 import Grid from '@mui/material/Grid2';
+import SearchIcon from '@mui/icons-material/Search';
 
 interface Props {
   onChange: React.ChangeEventHandler<HTMLInputElement>;
@@ -32,7 +33,7 @@ const FileInput: React.FC<Props> = ({onChange, name, label, required}) => {
     <>
       <input type="file" name={name} style={{display: 'none'}} ref={inputRef} onChange={onFileChange}/>
       <Grid container spacing={2} alignItems="center">
-        <Grid size={10}>
+        <Grid size={9}>
           <OutlinedInput
             fullWidth
             placeholder={label}
@@ -40,9 +41,9 @@ const FileInput: React.FC<Props> = ({onChange, name, label, required}) => {
             value={filename}
             onClick={activateInput}/>
         </Grid>
-        <Grid size={2}>
-          <Button variant="outlined" fullWidth onClick={activateInput}>
-            Browse
+        <Grid size={3}>
+          <Button variant="outlined"  onClick={activateInput}>
+            <SearchIcon/>
           </Button>
         </Grid>
       </Grid>
